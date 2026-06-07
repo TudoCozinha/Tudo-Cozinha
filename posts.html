@@ -1,244 +1,58 @@
 <!DOCTYPE html>
-<!-- saved from url=(0068)file:///C:/Users/COMFORMAK/Downloads/tudo_cozinha_gerador_posts.html -->
-<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tudo Cozinha — Gerador de Posts</title>
-<link href="./filtro meta bussines_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #080808;
-  --surface: #121212;
-  --surface2: #1a1a1a;
-  --wine: #7a1528;
-  --wine-light: #b01e38;
-  --gold: #c9a84c;
-  --text: #e8e0d5;
-  --muted: #777;
-  --border: #242424;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Jost', sans-serif;
-  font-weight: 300;
-  min-height: 100vh;
-  padding: 48px 20px 60px;
-}
-.header { text-align: center; margin-bottom: 40px; }
-.logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 30px;
-  letter-spacing: 8px;
-  text-transform: uppercase;
-  color: var(--text);
-}
-.logo em { color: var(--wine-light); font-style: normal; }
-.tagline {
-  font-size: 10px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 10px;
-}
-.rule {
-  width: 48px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--wine), transparent);
-  margin: 14px auto;
-}
-.card {
-  max-width: 620px;
-  margin: 0 auto;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 36px;
-}
-.api-box {
-  background: var(--surface2);
-  border-left: 2px solid var(--wine);
-  padding: 16px 18px;
-  margin-bottom: 28px;
-}
-.api-box-label {
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--wine-light);
-  margin-bottom: 10px;
-}
-.api-note {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 8px;
-  line-height: 1.6;
-}
-.api-note a { color: var(--gold); text-decoration: none; }
-.api-note a:hover { text-decoration: underline; }
-.field { margin-bottom: 20px; }
-.field label {
-  display: block;
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-input[type=text], input[type=password], textarea, select {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 1px;
-  color: var(--text);
-  font-family: 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 300;
-  padding: 11px 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  appearance: none;
-}
-input:focus, textarea:focus, select:focus { border-color: var(--wine); }
-textarea { resize: vertical; min-height: 76px; line-height: 1.6; }
-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.platforms { display: flex; gap: 10px; margin-top: 6px; }
-.plt {
-  flex: 1; padding: 10px 8px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: 'Jost', sans-serif;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s;
-  border-radius: 1px;
-}
-.plt.on { background: #1c0a10; border-color: var(--wine); color: var(--text); }
-.btn-main {
-  width: 100%;
-  padding: 15px;
-  background: var(--wine);
-  color: var(--text);
-  font-family: 'Jost', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 6px;
-  border-radius: 1px;
-}
-.btn-main:hover { background: var(--wine-light); }
-.btn-main:disabled { opacity: 0.4; cursor: not-allowed; }
-.loading {
-  display: none;
-  text-align: center;
-  padding: 32px 0;
-}
-.dots span {
-  display: inline-block;
-  width: 5px; height: 5px;
-  background: var(--wine-light);
-  border-radius: 50%;
-  margin: 0 3px;
-  animation: blink 1.2s infinite;
-}
-.dots span:nth-child(2) { animation-delay: .2s; }
-.dots span:nth-child(3) { animation-delay: .4s; }
-@keyframes blink { 0%,100%{opacity:.2;transform:scale(.8)} 50%{opacity:1;transform:scale(1.2)} }
-.loading-label {
-  font-size: 10px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 14px;
-}
-.error-box {
-  display: none;
-  background: #140808;
-  border: 1px solid #4a1515;
-  color: #e06060;
-  font-size: 13px;
-  padding: 12px 16px;
-  margin-top: 16px;
-  border-radius: 1px;
-  line-height: 1.5;
-}
-.results {
-  display: none;
-  margin-top: 32px;
-  border-top: 1px solid var(--border);
-  padding-top: 28px;
-}
-.results-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: 17px;
-  color: var(--gold);
-  letter-spacing: 1px;
-  margin-bottom: 20px;
-}
-.rblock {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--wine);
-  padding: 16px 16px 16px 18px;
-  margin-bottom: 14px;
-  position: relative;
-}
-.rblock-label {
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--wine-light);
-  margin-bottom: 10px;
-  padding-right: 60px;
-}
-.rtext {
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--text);
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-.btn-copy {
-  position: absolute;
-  top: 12px; right: 12px;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: 'Jost', sans-serif;
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border-radius: 1px;
-}
-.btn-copy:hover { border-color: var(--wine-light); color: var(--text); }
-.btn-copy.ok { border-color: #2d7a4e; color: #4caf7d; }
-.btn-refresh {
-  width: 100%;
-  padding: 12px;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: 'Jost', sans-serif;
-  font-size: 10px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 8px;
-  border-radius: 1px;
-}
-.btn-refresh:hover { border-color: var(--wine); color: var(--text); }
-@media(max-width:480px){.two-col{grid-template-columns:1fr}.card{padding:22px}}
+:root{--bg:#080808;--surface:#121212;--surface2:#1a1a1a;--wine:#7a1528;--wine-light:#b01e38;--gold:#c9a84c;--text:#e8e0d5;--muted:#777;--border:#242424}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Jost',sans-serif;font-weight:300;min-height:100vh;padding:48px 20px 100px}
+.header{text-align:center;margin-bottom:40px}
+.logo{font-family:'Playfair Display',serif;font-size:30px;letter-spacing:8px;text-transform:uppercase;color:var(--text)}
+.logo em{color:var(--wine-light);font-style:normal}
+.tagline{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.rule{width:48px;height:1px;background:linear-gradient(90deg,transparent,var(--wine),transparent);margin:14px auto}
+.card{max-width:620px;margin:0 auto;background:var(--surface);border:1px solid var(--border);padding:36px}
+.api-box{background:var(--surface2);border-left:2px solid var(--wine);padding:16px 18px;margin-bottom:28px}
+.api-box-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--wine-light);margin-bottom:10px}
+.api-note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6}
+.api-note a{color:var(--gold);text-decoration:none}
+.field{margin-bottom:20px}
+.field label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+input[type=text],input[type=password],textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:1px;color:var(--text);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;padding:11px 14px;outline:none;transition:border-color 0.2s;appearance:none}
+input:focus,textarea:focus,select:focus{border-color:var(--wine)}
+textarea{resize:vertical;min-height:76px;line-height:1.6}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.platforms{display:flex;gap:10px;margin-top:6px}
+.plt{flex:1;padding:10px 8px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:'Jost',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;border-radius:1px}
+.plt.on{background:#1c0a10;border-color:var(--wine);color:var(--text)}
+.btn-main{width:100%;padding:15px;background:var(--wine);color:var(--text);font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:4px;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.2s;margin-top:6px;border-radius:1px}
+.btn-main:hover{background:var(--wine-light)}
+.btn-main:disabled{opacity:.4;cursor:not-allowed}
+.loading{display:none;text-align:center;padding:32px 0}
+.dots span{display:inline-block;width:5px;height:5px;background:var(--wine-light);border-radius:50%;margin:0 3px;animation:blink 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+.loading-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:14px}
+.error-box{display:none;background:#140808;border:1px solid #4a1515;color:#e06060;font-size:13px;padding:12px 16px;margin-top:16px;border-radius:1px;line-height:1.5}
+.results{display:none;margin-top:32px;border-top:1px solid var(--border);padding-top:28px}
+.results-heading{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);letter-spacing:1px;margin-bottom:20px}
+.rblock{background:var(--surface2);border:1px solid var(--border);border-left:2px solid var(--wine);padding:16px 16px 16px 18px;margin-bottom:14px;position:relative}
+.rblock-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--wine-light);margin-bottom:10px;padding-right:60px}
+.rtext{font-size:14px;line-height:1.75;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.btn-copy{position:absolute;top:12px;right:12px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Jost',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;cursor:pointer;transition:all 0.2s;border-radius:1px}
+.btn-copy:hover{border-color:var(--wine-light);color:var(--text)}
+.btn-copy.ok{border-color:#2d7a4e;color:#4caf7d}
+.btn-refresh{width:100%;padding:12px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;margin-top:8px;border-radius:1px}
+.btn-refresh:hover{border-color:var(--wine);color:var(--text)}
+/* FRASE DE DEUS */
+#frase-deus{position:fixed;bottom:0;left:0;width:100%;background:#000000ee;border-top:1px solid #1a0a00;padding:7px 16px;text-align:center;z-index:999;pointer-events:none}
+#frase-deus span{font-family:'Playfair Display',serif;font-size:11px;color:var(--gold);opacity:.75;letter-spacing:.5px;font-style:italic}
+@media(max-width:480px){.two-col{grid-template-columns:1fr}.card{padding:22px}#frase-deus span{font-size:9px}}
 </style>
 </head>
 <body>
@@ -250,27 +64,19 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 </div>
 
 <div class="card">
-
   <div class="api-box">
     <div class="api-box-label">Chave da API Anthropic</div>
     <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off">
-    <div class="api-note">
-      Sua chave fica só no seu navegador. Obtenha gratuitamente em
-      <a href="https://console.anthropic.com/keys" target="_blank">console.anthropic.com/keys</a>
-      — cobra apenas por uso (≈ R$ 0,005 por post gerado).
-    </div>
+    <div class="api-note">Sua chave fica só no seu navegador. Obtenha gratuitamente em <a href="https://console.anthropic.com/keys" target="_blank">console.anthropic.com/keys</a> — cobra apenas por uso (≈ R$ 0,005 por post gerado).</div>
   </div>
-
   <div class="field">
     <label>Nome do produto</label>
     <input type="text" id="nome" placeholder="Ex: Faca de churrasco profissional aço inox 30cm">
   </div>
-
   <div class="field">
     <label>Descrição do produto</label>
-    <textarea id="desc" placeholder="Ex: Lâmina em aço alemão 1.4116, cabo em madeira natural tratada, ideal para cortes precisos em carnes nobres..."></textarea>
+    <textarea id="desc" placeholder="Ex: Lâmina em aço alemão 1.4116, cabo em madeira natural tratada..."></textarea>
   </div>
-
   <div class="two-col">
     <div class="field">
       <label>Preço (R$)</label>
@@ -288,7 +94,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
       </select>
     </div>
   </div>
-
   <div class="field">
     <label>Plataforma</label>
     <div class="platforms">
@@ -297,148 +102,83 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
       <button class="plt on" data-p="Instagram e Facebook" onclick="selPlt(this)">Ambos</button>
     </div>
   </div>
-
   <button class="btn-main" onclick="gerar()">✦ &nbsp;Gerar Post</button>
-
-  <div class="error-box" id="err" style="display: none;"></div>
-
-  <div class="loading" id="load" style="display: none;">
+  <div class="error-box" id="err"></div>
+  <div class="loading" id="load">
     <div class="dots"><span></span><span></span><span></span></div>
     <div class="loading-label">Criando seu post...</div>
   </div>
-
-  <div class="results" id="results" style="display: block;">
+  <div class="results" id="results">
     <div class="results-heading">Post gerado</div>
-
     <div class="rblock" id="b1">
       <div class="rblock-label">Legenda</div>
-      <button class="btn-copy" onclick="copiar(&#39;b1&#39;)">Copiar</button>
-      <div class="rtext" id="t1">Uma faca bem afiada é a diferença entre um corte comum e aquele momento que fica na memória. Nosso afiador artesanal em madeira nobre foi pensado para quem entende que o churrasco começa bem antes de colocar a carne na grelha. Cada detalhe importa quando a família está à mesa. 🔥</div>
+      <button class="btn-copy" onclick="copiar('b1')">Copiar</button>
+      <div class="rtext" id="t1"></div>
     </div>
-
     <div class="rblock" id="b2">
       <div class="rblock-label">Hashtags</div>
-      <button class="btn-copy" onclick="copiar(&#39;b2&#39;)">Copiar</button>
-      <div class="rtext" id="t2">#TudoCozinha #AfiadorArtesanal #ChurrascoDeVerdade #MadeiraNobre #RitualDoChurrasco #CozinhaGourmet #ChurrascoEmCasa #MesamBrasileira #AcessóriosGourmet #VidaBemVivida #FamiliaReuniDa #GourmetBrasileiro #CozinhaLuxo #ChurrascoComEstilo #ProdutosPremium #AfiadorMadeira #GrelheAoPerfeito #MomentoEmFamília #CulinariaArtesanal #CasaGourmet #ChurrascoBrasileiro #LuxoNoDetalhe #MadeiraNoble #FaçaPerfeita #GourmetCooking #ChurrascoLife #CozinhaArtesanal #PremiumChoice</div>
+      <button class="btn-copy" onclick="copiar('b2')">Copiar</button>
+      <div class="rtext" id="t2"></div>
     </div>
-
     <div class="rblock" id="b3">
       <div class="rblock-label">Call to action — bio / stories</div>
-      <button class="btn-copy" onclick="copiar(&#39;b3&#39;)">Copiar</button>
-      <div class="rtext" id="t3">Descubra o afiador que transforma seu churrasco
-Conheça a peça que sua mesa merecia</div>
+      <button class="btn-copy" onclick="copiar('b3')">Copiar</button>
+      <div class="rtext" id="t3"></div>
     </div>
-
     <button class="btn-refresh" onclick="gerar()">↻ &nbsp;Nova versão</button>
   </div>
+</div>
 
+<!-- FRASE DE DEUS — SEMPRE VISÍVEL -->
+<div id="frase-deus">
+  <span>🙏 "Mi negócio es el negócio de Dios y los negócios de Dios nunca fracasan, vai."</span>
 </div>
 
 <script>
-let plat = 'Instagram';
-
-function selPlt(btn) {
-  document.querySelectorAll('.plt').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  plat = btn.dataset.p;
-}
-
-function mostrarErro(msg) {
-  const el = document.getElementById('err');
-  el.textContent = msg;
-  el.style.display = 'block';
-  document.getElementById('load').style.display = 'none';
-  document.querySelector('.btn-main').disabled = false;
-}
-
-async function gerar() {
-  const key  = document.getElementById('apiKey').value.trim();
-  const nome = document.getElementById('nome').value.trim();
-  const desc = document.getElementById('desc').value.trim();
-  const preco = document.getElementById('preco').value.trim();
-  const cat  = document.getElementById('cat').value;
-
-  document.getElementById('err').style.display = 'none';
-  document.getElementById('results').style.display = 'none';
-
-  if (!key)  return mostrarErro('Cole sua chave da API Anthropic no campo acima.');
-  if (!nome) return mostrarErro('Informe o nome do produto.');
-
-  document.getElementById('load').style.display = 'block';
-  document.querySelector('.btn-main').disabled = true;
-
-  const prompt = `Você é copywriter especialista em marcas de luxo brasileiras focadas em cozinha e churrasco.
+let plat='Instagram e Facebook';
+function selPlt(btn){document.querySelectorAll('.plt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');plat=btn.dataset.p;}
+function mostrarErro(msg){const el=document.getElementById('err');el.textContent=msg;el.style.display='block';document.getElementById('load').style.display='none';document.querySelector('.btn-main').disabled=false;}
+async function gerar(){
+  const key=document.getElementById('apiKey').value.trim();
+  const nome=document.getElementById('nome').value.trim();
+  const desc=document.getElementById('desc').value.trim();
+  const preco=document.getElementById('preco').value.trim();
+  const cat=document.getElementById('cat').value;
+  document.getElementById('err').style.display='none';
+  document.getElementById('results').style.display='none';
+  if(!key)return mostrarErro('Cole sua chave da API Anthropic no campo acima.');
+  if(!nome)return mostrarErro('Informe o nome do produto.');
+  document.getElementById('load').style.display='block';
+  document.querySelector('.btn-main').disabled=true;
+  const prompt=`Você é copywriter especialista em marcas de luxo brasileiras focadas em cozinha e churrasco.
 A marca "Tudo Cozinha" vende produtos premium para famílias brasileiras apaixonadas por boa mesa e churrasco.
 Tom: sofisticado, emotivo, valoriza momentos em família e paixão pelo fogo e pela boa comida.
 NÃO use clichês genéricos. Escreva em português brasileiro natural.
 
 Produto:
 Nome: ${nome}
-${desc ? 'Descrição: ' + desc : ''}
-${preco ? 'Preço: R$ ' + preco : ''}
+${desc?'Descrição: '+desc:''}
+${preco?'Preço: R$ '+preco:''}
 Categoria: ${cat}
 Plataforma: ${plat}
 
 Responda SOMENTE com JSON válido, sem texto extra, sem markdown:
 {"legenda":"legenda emotiva de 3 a 5 linhas, máximo 2 emojis, que desperte desejo genuíno","hashtags":"28 hashtags em português e inglês separadas por espaço","cta":"call to action curto e persuasivo para bio ou stories, máximo 2 linhas"}`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 650,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    if (!res.ok) {
-      const e = await res.json().catch(() => ({}));
-      throw new Error(e?.error?.message || 'Erro HTTP ' + res.status);
-    }
-
-    const data = await res.json();
-    let raw = data?.content?.[0]?.text?.trim() || '';
-
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:650,messages:[{role:'user',content:prompt}]})});
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||'Erro HTTP '+res.status);}
+    const data=await res.json();
+    let raw=data?.content?.[0]?.text?.trim()||'';
     let json;
-    try { json = JSON.parse(raw); }
-    catch {
-      const m = raw.match(/\{[\s\S]*\}/);
-      if (m) json = JSON.parse(m[0]);
-      else throw new Error('Resposta fora do formato esperado. Tente novamente.');
-    }
-
-    document.getElementById('t1').textContent = json.legenda   || '';
-    document.getElementById('t2').textContent = json.hashtags  || '';
-    document.getElementById('t3').textContent = json.cta       || '';
-
-    document.getElementById('load').style.display = 'none';
-    document.getElementById('results').style.display = 'block';
-
-  } catch(e) {
-    mostrarErro('Erro: ' + e.message);
-  } finally {
-    document.querySelector('.btn-main').disabled = false;
-    document.getElementById('load').style.display = 'none';
-  }
+    try{json=JSON.parse(raw);}catch{const m=raw.match(/\{[\s\S]*\}/);if(m)json=JSON.parse(m[0]);else throw new Error('Resposta fora do formato esperado. Tente novamente.');}
+    document.getElementById('t1').textContent=json.legenda||'';
+    document.getElementById('t2').textContent=json.hashtags||'';
+    document.getElementById('t3').textContent=json.cta||'';
+    document.getElementById('load').style.display='none';
+    document.getElementById('results').style.display='block';
+  }catch(e){mostrarErro('Erro: '+e.message);}finally{document.querySelector('.btn-main').disabled=false;document.getElementById('load').style.display='none';}
 }
-
-function copiar(id) {
-  const txt = document.getElementById(id).querySelector('.rtext').textContent;
-  const btn = document.getElementById(id).querySelector('.btn-copy');
-  navigator.clipboard.writeText(txt).then(() => {
-    btn.textContent = '✓ Copiado';
-    btn.classList.add('ok');
-    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('ok'); }, 2200);
-  });
-}
+function copiar(id){const txt=document.getElementById(id).querySelector('.rtext').textContent;const btn=document.getElementById(id).querySelector('.btn-copy');navigator.clipboard.writeText(txt).then(()=>{btn.textContent='✓ Copiado';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2200);});}
 </script>
-
-
-</body></html>
+</body>
+</html>
