@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/COMFORMAK/Downloads/mapa.html -->
-<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tudo Cozinha — Mapa do Primeiro Milhão</title>
-<link href="./Tudo Cozinha — Mapa do Primeiro Milhão_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--gold:#c9a84c;--wine:#8b1a2f;--dark:#0d0d0d;--cream:#f0e6cc;--green:#00ff88;--red:#ff4444;--blue:#4488ff;--purple:#9944ff}
@@ -139,7 +139,7 @@ html,body{background:var(--dark);font-family:'Press Start 2P',monospace;color:va
 <body>
 
 <!-- INTRO SCREEN -->
-<div id="intro" style="display: none;">
+<div id="intro">
   <div style="font-size:clamp(8px,2vw,13px);color:var(--gold);letter-spacing:4px">TUDO COZINHA</div>
   <div class="sub">MAPA DO PRIMEIRO MILHÃO</div>
   <div class="frase">
@@ -152,37 +152,37 @@ html,body{background:var(--dark);font-family:'Press Start 2P',monospace;color:va
 </div>
 
 <!-- GAME UI -->
-<div id="game" style="display: block;">
+<div id="game" style="display:none">
 
 <div id="hud">
   <div class="hud-block">OPERADOR<br><span class="hud-val">JUAN 🙏</span></div>
   <div class="hud-block">FASE ATUAL<br><span class="hud-val" id="h-fase">2-1</span></div>
   <div class="hud-block" id="prog-wrap">META: R$ 1.000.000
-    <div id="prog-bar"><div id="prog-fill" style="width: 23%;"></div></div>
-    <div id="prog-label">3 de 13 fases concluídas (23%)</div>
+    <div id="prog-bar"><div id="prog-fill"></div></div>
+    <div id="prog-label">calculando...</div>
   </div>
   <div class="hud-block">VIDAS<br><span class="hud-val">♥ ♥ ♥</span></div>
 </div>
 
 <div id="nav">
-  <button class="nav-btn active" onclick="showView(&#39;map&#39;,this)">🗺️ MAPA</button>
-  <button class="nav-btn" onclick="showView(&#39;dash&#39;,this)">📊 DASH</button>
-  <button class="nav-btn" onclick="showView(&#39;prompts&#39;,this)">💬 PROMPTS</button>
-  <button class="nav-btn" onclick="showView(&#39;info&#39;,this)">ℹ️ COMO USAR</button>
+  <button class="nav-btn active" onclick="showView('map',this)">🗺️ MAPA</button>
+  <button class="nav-btn" onclick="showView('dash',this)">📊 DASH</button>
+  <button class="nav-btn" onclick="showView('prompts',this)">💬 PROMPTS</button>
+  <button class="nav-btn" onclick="showView('info',this)">ℹ️ COMO USAR</button>
 </div>
 
 <div class="view active" id="view-map">
   <div class="frase-banner">🙏 <span>"Mi negócio es el negócio de Dios y los negócios de Dios nunca fracasan, vai."</span></div>
-  <div id="map-content"><div class="world"><div class="world-header"><div class="world-icon">🏗️</div><div class="world-name">MUNDO 1 — FUNDAÇÃO</div><div class="world-prog">3/3 ★</div></div><div class="nodes-row"><div class="node done"><div class="node-icon">🏪</div><div class="node-id">1-1</div><div class="node-label">LOJA BASE</div><div class="star-b">★</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node done"><div class="node-icon">📦</div><div class="node-id">1-2</div><div class="node-label">PRODUTOS</div><div class="star-b">★</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node done"><div class="node-icon">🎨</div><div class="node-id">1-3</div><div class="node-label">BRAND</div><div class="star-b">★</div></div></div></div><div class="world"><div class="world-header"><div class="world-icon">🔥</div><div class="world-name">MUNDO 2 — EXPERIÊNCIA DA LOJA</div><div class="world-prog">0/3 ★</div></div><div class="nodes-row"><div class="node active"><div class="node-icon">🥩</div><div class="node-id">2-1</div><div class="node-label">CHURRASCO 5★</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node active"><div class="node-icon">📄</div><div class="node-id">2-2</div><div class="node-label">PÁGINAS</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node active"><div class="node-icon">💎</div><div class="node-id">2-3</div><div class="node-label">PRODUTOS ★</div></div></div></div><div class="world"><div class="world-header"><div class="world-icon">📦</div><div class="world-name">MUNDO 3 — OPERAÇÃO &amp; RASTREIO</div><div class="world-prog">0/2 ★</div></div><div class="nodes-row"><div class="node blocked"><div class="node-icon">🔍</div><div class="node-id">3-1</div><div class="node-label">RASTREIO</div><div class="pay-b">💳</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node locked"><div class="node-icon">🏭</div><div class="node-id">3-2</div><div class="node-label">FORNECEDOR BR</div></div></div></div><div class="world"><div class="world-header"><div class="world-icon">📱</div><div class="world-name">MUNDO 4 — CONTEÚDO &amp; TRÁFEGO</div><div class="world-prog">0/3 ★</div></div><div class="nodes-row"><div class="node active"><div class="node-icon">🎬</div><div class="node-id">4-1</div><div class="node-label">TIKTOK SHOP</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node locked"><div class="node-icon">📸</div><div class="node-id">4-2</div><div class="node-label">9 POSTS FEED</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node locked"><div class="node-icon">💰</div><div class="node-id">4-3</div><div class="node-label">META ADS</div></div></div></div><div class="world"><div class="world-header"><div class="world-icon">🚀</div><div class="world-name">MUNDO 5 — ESCALA &amp; AUTOMAÇÃO</div><div class="world-prog">0/2 ★</div></div><div class="nodes-row"><div class="node locked"><div class="node-icon">⚙️</div><div class="node-id">5-1</div><div class="node-label">PIPELINE AUTO</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node locked"><div class="node-icon">🏆</div><div class="node-id">5-2</div><div class="node-label">BOSS FINAL</div></div></div></div></div>
+  <div id="map-content"></div>
 </div>
 
 <div class="view" id="view-dash">
   <div class="frase-banner">🔥 <span>Deus na frente — sempre.</span> Progresso em tempo real.</div>
   <div class="dash-grid">
-    <div class="dash-card"><div class="dash-label">FASES COMPLETAS</div><div class="dash-val" id="d-done">3</div><div class="dash-sub">missões concluídas</div></div>
-    <div class="dash-card"><div class="dash-label">EM ANDAMENTO</div><div class="dash-val" id="d-active" style="color:var(--red)">4</div><div class="dash-sub">fases simultâneas</div></div>
-    <div class="dash-card"><div class="dash-label">BLOQUEADAS $</div><div class="dash-val" id="d-blocked" style="color:var(--wine)">1</div><div class="dash-sub">aguardam pagamento</div></div>
-    <div class="dash-card"><div class="dash-label">PROGRESSO</div><div class="dash-val" id="d-pct" style="color:var(--green)">23%</div><div class="dash-sub">rumo ao 1º milhão</div></div>
+    <div class="dash-card"><div class="dash-label">FASES COMPLETAS</div><div class="dash-val" id="d-done">-</div><div class="dash-sub">missões concluídas</div></div>
+    <div class="dash-card"><div class="dash-label">EM ANDAMENTO</div><div class="dash-val" id="d-active" style="color:var(--red)">-</div><div class="dash-sub">fases simultâneas</div></div>
+    <div class="dash-card"><div class="dash-label">BLOQUEADAS $</div><div class="dash-val" id="d-blocked" style="color:var(--wine)">-</div><div class="dash-sub">aguardam pagamento</div></div>
+    <div class="dash-card"><div class="dash-label">PROGRESSO</div><div class="dash-val" id="d-pct" style="color:var(--green)">-</div><div class="dash-sub">rumo ao 1º milhão</div></div>
   </div>
   <div class="act-box">
     <div class="act-title">📋 LOG DE ATIVIDADES</div>
@@ -198,7 +198,7 @@ html,body{background:var(--dark);font-family:'Press Start 2P',monospace;color:va
 
 <div class="view" id="view-prompts">
   <div class="frase-banner"><span>"sou o Juan, Tudo Cozinha, estou na fase [X] — vamos trabalhar nisso"</span><br><span style="color:#555;font-size:4px">— cole sempre essa frase ao abrir nova conversa com o Claude</span></div>
-  <div id="prompts-content"><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🏪</div><div class="pc-title">FASE 1-1 — Shopify Canyon no Ar</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 1-1 — quero revisar a configuração base do meu Shopify Canyon. Paleta gold #c9a84c / black #0d0d0d / wine #8b1a2f / cream #f0e6cc. Tem algo importante que ainda falta na fundação da loja?</div><button class="btn-cp" onclick="cpPrompt(&#39;1-1&#39;,this)">📋 COPIAR FASE 1-1</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">📦</div><div class="pc-title">FASE 1-2 — Catálogo DSers + AliExpress</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 1-2 — quero expandir meu catálogo DSers/AliExpress com novos produtos de cozinha e churrasco premium. Me ajuda a criar critérios de seleção para garantir qualidade real e não enganar o público</div><button class="btn-cp" onclick="cpPrompt(&#39;1-2&#39;,this)">📋 COPIAR FASE 1-2</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🎨</div><div class="pc-title">FASE 1-3 — Identidade Visual Completa</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 1-3 — quero evoluir a identidade visual e criar novos templates. Canva Pro ativo. Paleta gold/black/wine/cream. Como posso elevar ainda mais o brand para o nível premium que quero?</div><button class="btn-cp" onclick="cpPrompt(&#39;1-3&#39;,this)">📋 COPIAR FASE 1-3</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🥩</div><div class="pc-title">FASE 2-1 — Ambiente Temático Premium</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 2-1 — preciso do código Liquid completo para embedar o áudio fire.mp3 no Canyon com autoplay silencioso em loop + botão toggle elegante. A URL do arquivo estará no Shopify CDN. Lembrando: no Canyon o CSS customizado só funciona em bloco Liquid direto, nunca em arquivo externo</div><button class="btn-cp" onclick="cpPrompt(&#39;2-1&#39;,this)">📋 COPIAR FASE 2-1</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">📄</div><div class="pc-title">FASE 2-2 — Padronização Total das Páginas</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 2-2 — precisa de um prompt certeiro para o Sidekick listar todas as páginas da minha loja Canyon e padronizá-las. Quero trocar 'Desenvolvido por Shopify' por 'Desenvolvido por Tudo Cozinha' e personalizar a tela de loja pausada com meu logo. Como fazer isso no Canyon?</div><button class="btn-cp" onclick="cpPrompt(&#39;2-2&#39;,this)">📋 COPIAR FASE 2-2</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">💎</div><div class="pc-title">FASE 2-3 — Curadoria Produtos Premium Reais</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 2-3 — quero criar critérios rígidos de curadoria para produtos de cozinha e churrasco premium. Não posso enganar meu público. Me ajuda a definir o que qualifica um produto como realmente premium e listar candidatos no AliExpress/DSers</div><button class="btn-cp" onclick="cpPrompt(&#39;2-3&#39;,this)">📋 COPIAR FASE 2-3</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🔍</div><div class="pc-title">FASE 3-1 — Rastreio.io — Configuração Completa</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 3-1 — acabei de pagar o plano do Rastreio.io. O app já está integrado no Shopify. Preciso configurar completamente os templates de mensagem WhatsApp com branding Tudo Cozinha. Me guia passo a passo</div><button class="btn-cp" onclick="cpPrompt(&#39;3-1&#39;,this)">📋 COPIAR FASE 3-1</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🎬</div><div class="pc-title">FASE 4-1 — TikTok Shop — Primeiras Vendas</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 4-1 — TikTok Shop aprovado e configurado. Preciso de um roteiro completo para os 9 primeiros vídeos que vão ativar o algoritmo e gerar vendas. Produtos de cozinha e churrasco premium. Estética dark luxury gold/black</div><button class="btn-cp" onclick="cpPrompt(&#39;4-1&#39;,this)">📋 COPIAR FASE 4-1</button></div></div>
+  <div id="prompts-content"></div>
 </div>
 
 <div class="view" id="view-info">
@@ -208,7 +208,7 @@ html,body{background:var(--dark);font-family:'Press Start 2P',monospace;color:va
     <div class="info-body">
       <b>1. MAPA</b> — Veja todas as fases organizadas por mundo. Clique em qualquer node (exceto 🔒 bloqueados) para abrir os detalhes, checklist e prompt.<br><br>
       <b>2. CHECKLIST</b> — Dentro de cada fase, clique nas tarefas para marcar como concluído. O progresso salva automaticamente no seu navegador.<br><br>
-      <b>3. PROMPTS</b> — Cada fase tem um prompt pronto para copiar. Cole no Claude sempre iniciando com: <span style="color:var(--gold);font-family:&#39;Press Start 2P&#39;,monospace;font-size:5px">"sou o Juan, Tudo Cozinha, estou na fase X"</span><br><br>
+      <b>3. PROMPTS</b> — Cada fase tem um prompt pronto para copiar. Cole no Claude sempre iniciando com: <span style="color:var(--gold);font-family:'Press Start 2P',monospace;font-size:5px">"sou o Juan, Tudo Cozinha, estou na fase X"</span><br><br>
       <b>4. FASES VERMELHAS ►</b> — Em andamento. Foco aqui agora.<br><br>
       <b style="color:var(--wine)">5. FASES 💳</b> — Bloqueadas por pagamento. Quando pagar, avisa o Claude e desbloqueamos juntos na próxima versão do app.<br><br>
       <b>6. ATUALIZAR</b> — Quando uma fase evoluir, me avisa no Claude. Gero o código novo e você substitui o mapa.html no GitHub. Simples assim.<br><br>
@@ -230,27 +230,27 @@ html,body{background:var(--dark);font-family:'Press Start 2P',monospace;color:va
 </div><!-- /game -->
 
 <!-- MODAL -->
-<div id="modal" class="">
+<div id="modal">
   <div id="mbox">
     <div class="mhead">
-      <div class="mhead-icon" id="m-icon">🎨</div>
+      <div class="mhead-icon" id="m-icon">🔥</div>
       <div class="mhead-info">
-        <div class="mhead-id" id="m-id">FASE 1-3</div>
-        <div class="mhead-title" id="m-title">Identidade Visual Completa</div>
+        <div class="mhead-id" id="m-id">FASE 1-1</div>
+        <div class="mhead-title" id="m-title">Título</div>
       </div>
     </div>
     <div class="mbody">
-      <div id="m-status"><div class="status-pill p-done">✓ CONCLUÍDO</div></div>
-      <div class="mdesc" id="m-desc">Logo, cores, templates Canva Pro padronizados. Kit de mídias definido (1080x1080, 1080x1350, 1920x1080, 1080x1920). Apps GitHub Pages funcionando.</div>
+      <div id="m-status"></div>
+      <div class="mdesc" id="m-desc"></div>
       <div class="sec-label">✓ CHECKLIST DA FASE</div>
-      <div id="m-tasks"><div class="task"><div class="tchk done">✓</div><div class="ttxt done">Logo Tudo Cozinha finalizado</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">Paleta oficial estabelecida</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">Templates Canva Pro criados</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">Canal @TudoCozinhaBR criado</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">App 1: Gerador de descrições ativo</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">App 2: Gerador de posts Meta ativo</div></div></div>
+      <div id="m-tasks"></div>
       <div class="reward-box">
         <div class="reward-label">🏆 RECOMPENSA</div>
-        <div class="reward-val" id="m-reward">Brand premium reconhecível — fundação de autoridade</div>
+        <div class="reward-val" id="m-reward"></div>
       </div>
       <div class="prompt-box">
         <div class="prompt-label">💬 PROMPT PARA O CLAUDE</div>
-        <div class="prompt-txt" id="m-prompt">sou o Juan, Tudo Cozinha, estou na fase 1-3 — quero evoluir a identidade visual e criar novos templates. Canva Pro ativo. Paleta gold/black/wine/cream. Como posso elevar ainda mais o brand para o nível premium que quero?</div>
+        <div class="prompt-txt" id="m-prompt"></div>
         <button class="btn-copy" id="m-copy-btn" onclick="copyModalPrompt()">📋 COPIAR PROMPT</button>
       </div>
       <button class="btn-close" onclick="closeModal()">✕ FECHAR FASE</button>
@@ -466,6 +466,5 @@ function showView(name,btn){
   if(btn)btn.classList.add('active');
 }
 </script>
-
-
-</body></html>
+</body>
+</html>
