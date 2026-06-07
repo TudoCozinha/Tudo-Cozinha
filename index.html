@@ -1,95 +1,57 @@
 <!DOCTYPE html>
-<!-- saved from url=(0069)file:///C:/Users/COMFORMAK/Downloads/tudo_cozinha_app1_shopify_1.html -->
-<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tudo Cozinha — Gerador de Descrição Shopify</title>
-<link href="./filtro de Ali pra shopify_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #080808;
-  --surface: #121212;
-  --surface2: #1a1a1a;
-  --wine: #7a1528;
-  --wine-light: #b01e38;
-  --gold: #c9a84c;
-  --text: #e8e0d5;
-  --muted: #777;
-  --border: #242424;
-  --green: #2d7a4e;
-  --green-light: #4caf7d;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Jost', sans-serif;
-  font-weight: 300;
-  min-height: 100vh;
-  padding: 48px 20px 60px;
-}
-.header { text-align: center; margin-bottom: 40px; }
-.logo { font-family: 'Playfair Display', serif; font-size: 28px; letter-spacing: 8px; text-transform: uppercase; }
-.logo em { color: var(--wine-light); font-style: normal; }
-.sub { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
-.rule { width: 48px; height: 1px; background: linear-gradient(90deg, transparent, var(--wine), transparent); margin: 14px auto; }
-.card { max-width: 680px; margin: 0 auto; background: var(--surface); border: 1px solid var(--border); padding: 36px; }
-.api-box { background: var(--surface2); border-left: 2px solid var(--wine); padding: 16px 18px; margin-bottom: 28px; }
-.api-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--wine-light); margin-bottom: 10px; }
-.api-note { font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
-.api-note a { color: var(--gold); text-decoration: none; }
-.field { margin-bottom: 20px; }
-.field label { display: block; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-.hint { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
-input[type=password], input[type=text], textarea, select {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 1px;
-  color: var(--text);
-  font-family: 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 300;
-  padding: 11px 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  appearance: none;
-}
-input:focus, textarea:focus, select:focus { border-color: var(--wine); }
-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.btn-main {
-  width: 100%; padding: 15px;
-  background: var(--wine);
-  color: var(--text);
-  font-family: 'Jost', sans-serif;
-  font-size: 11px; font-weight: 500;
-  letter-spacing: 4px; text-transform: uppercase;
-  border: none; cursor: pointer;
-  transition: background 0.2s; margin-top: 6px; border-radius: 1px;
-}
-.btn-main:hover { background: var(--wine-light); }
-.btn-main:disabled { opacity: 0.4; cursor: not-allowed; }
-.loading { display: none; text-align: center; padding: 32px 0; }
-.dots span { display: inline-block; width: 5px; height: 5px; background: var(--wine-light); border-radius: 50%; margin: 0 3px; animation: blink 1.2s infinite; }
-.dots span:nth-child(2) { animation-delay: .2s; }
-.dots span:nth-child(3) { animation-delay: .4s; }
-@keyframes blink { 0%,100%{opacity:.2;transform:scale(.8)} 50%{opacity:1;transform:scale(1.2)} }
-.loading-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-top: 14px; }
-.error-box { display: none; background: #140808; border: 1px solid #4a1515; color: #e06060; font-size: 13px; padding: 12px 16px; margin-top: 16px; border-radius: 1px; line-height: 1.5; }
-.results { display: none; margin-top: 32px; border-top: 1px solid var(--border); padding-top: 28px; }
-.results-heading { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--gold); letter-spacing: 1px; margin-bottom: 8px; }
-.results-sub { font-size: 11px; color: var(--muted); margin-bottom: 20px; letter-spacing: 1px; }
-.rblock { background: var(--surface2); border: 1px solid var(--border); border-left: 2px solid var(--wine); padding: 16px 16px 16px 18px; margin-bottom: 14px; position: relative; }
-.rblock-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--wine-light); margin-bottom: 10px; padding-right: 70px; }
-.rtext { font-size: 14px; line-height: 1.75; color: var(--text); white-space: pre-wrap; word-break: break-word; }
-.btn-copy { position: absolute; top: 12px; right: 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'Jost', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 10px; cursor: pointer; transition: all 0.2s; border-radius: 1px; }
-.btn-copy:hover { border-color: var(--wine-light); color: var(--text); }
-.btn-copy.ok { border-color: var(--green); color: var(--green-light); }
-.btn-refresh { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; margin-top: 8px; border-radius: 1px; }
-.btn-refresh:hover { border-color: var(--wine); color: var(--text); }
-.step-badge { display: inline-block; background: var(--wine); color: var(--text); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 3px 10px; margin-bottom: 20px; border-radius: 1px; }
-@media(max-width:480px){ .two-col{grid-template-columns:1fr} .card{padding:22px} }
+:root{--bg:#080808;--surface:#121212;--surface2:#1a1a1a;--wine:#7a1528;--wine-light:#b01e38;--gold:#c9a84c;--text:#e8e0d5;--muted:#777;--border:#242424;--green:#2d7a4e;--green-light:#4caf7d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Jost',sans-serif;font-weight:300;min-height:100vh;padding:48px 20px 100px}
+.header{text-align:center;margin-bottom:40px}
+.logo{font-family:'Playfair Display',serif;font-size:28px;letter-spacing:8px;text-transform:uppercase}
+.logo em{color:var(--wine-light);font-style:normal}
+.sub{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.rule{width:48px;height:1px;background:linear-gradient(90deg,transparent,var(--wine),transparent);margin:14px auto}
+.card{max-width:680px;margin:0 auto;background:var(--surface);border:1px solid var(--border);padding:36px}
+.api-box{background:var(--surface2);border-left:2px solid var(--wine);padding:16px 18px;margin-bottom:28px}
+.api-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--wine-light);margin-bottom:10px}
+.api-note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6}
+.api-note a{color:var(--gold);text-decoration:none}
+.field{margin-bottom:20px}
+.field label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+input[type=password],input[type=text],textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:1px;color:var(--text);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;padding:11px 14px;outline:none;transition:border-color 0.2s;appearance:none}
+input:focus,textarea:focus,select:focus{border-color:var(--wine)}
+textarea{resize:vertical;min-height:100px;line-height:1.6}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.btn-main{width:100%;padding:15px;background:var(--wine);color:var(--text);font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:4px;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.2s;margin-top:6px;border-radius:1px}
+.btn-main:hover{background:var(--wine-light)}
+.btn-main:disabled{opacity:.4;cursor:not-allowed}
+.loading{display:none;text-align:center;padding:32px 0}
+.dots span{display:inline-block;width:5px;height:5px;background:var(--wine-light);border-radius:50%;margin:0 3px;animation:blink 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+.loading-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:14px}
+.error-box{display:none;background:#140808;border:1px solid #4a1515;color:#e06060;font-size:13px;padding:12px 16px;margin-top:16px;border-radius:1px;line-height:1.5}
+.results{display:none;margin-top:32px;border-top:1px solid var(--border);padding-top:28px}
+.results-heading{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);letter-spacing:1px;margin-bottom:8px}
+.results-sub{font-size:11px;color:var(--muted);margin-bottom:20px;letter-spacing:1px}
+.rblock{background:var(--surface2);border:1px solid var(--border);border-left:2px solid var(--wine);padding:16px 16px 16px 18px;margin-bottom:14px;position:relative}
+.rblock-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--wine-light);margin-bottom:10px;padding-right:70px}
+.rtext{font-size:14px;line-height:1.75;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.btn-copy{position:absolute;top:12px;right:12px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Jost',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;cursor:pointer;transition:all 0.2s;border-radius:1px}
+.btn-copy:hover{border-color:var(--wine-light);color:var(--text)}
+.btn-copy.ok{border-color:var(--green);color:var(--green-light)}
+.btn-refresh{width:100%;padding:12px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;margin-top:8px;border-radius:1px}
+.btn-refresh:hover{border-color:var(--wine);color:var(--text)}
+.step-badge{display:inline-block;background:var(--wine);color:var(--text);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;margin-bottom:20px;border-radius:1px}
+/* FRASE DE DEUS — RODAPÉ FIXO */
+#frase-deus{position:fixed;bottom:0;left:0;width:100%;background:#000000ee;border-top:1px solid #1a0a00;padding:7px 16px;text-align:center;z-index:999;pointer-events:none}
+#frase-deus span{font-family:'Playfair Display',serif;font-size:11px;color:var(--gold);opacity:.75;letter-spacing:.5px;font-style:italic}
+@media(max-width:480px){.two-col{grid-template-columns:1fr}.card{padding:22px}#frase-deus span{font-size:9px}}
 </style>
 </head>
 <body>
@@ -101,26 +63,21 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 </div>
 
 <div class="card">
-
   <div class="api-box">
     <div class="api-label">Chave da API Anthropic</div>
     <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off">
     <div class="api-note">Mesma chave do App de Posts. Obtenha em <a href="https://console.anthropic.com/keys" target="_blank">console.anthropic.com/keys</a></div>
   </div>
-
   <div class="step-badge">① Cole os dados brutos do AliExpress</div>
-
   <div class="field">
     <label>Nome do produto no AliExpress</label>
     <input type="text" id="nomeAli" placeholder="Cole aqui o título original do AliExpress">
   </div>
-
   <div class="field">
     <label>Descrição / especificações brutas</label>
     <textarea id="descAli" placeholder="Cole aqui a descrição completa do AliExpress — pode ser em inglês, chinês ou português misturado. Quanto mais informação, melhor."></textarea>
     <div class="hint">Pode colar tudo: materiais, dimensões, o que vem na caixa, instruções. A IA filtra e transforma.</div>
   </div>
-
   <div class="two-col">
     <div class="field">
       <label>Preço de venda (R$)</label>
@@ -138,80 +95,69 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
       </select>
     </div>
   </div>
-
   <button class="btn-main" onclick="gerar()">✦ &nbsp;Gerar Descrição Shopify</button>
-
   <div class="error-box" id="err"></div>
-
   <div class="loading" id="load">
     <div class="dots"><span></span><span></span><span></span></div>
     <div class="loading-label">Transformando em produto premium...</div>
   </div>
-
   <div class="results" id="results">
     <div class="results-heading">Descrição gerada</div>
     <div class="results-sub">Copie cada bloco e cole no Shopify</div>
-
     <div class="rblock" id="b1">
       <div class="rblock-label">Título do produto — cole no campo "Título"</div>
-      <button class="btn-copy" onclick="copiar(&#39;b1&#39;)">Copiar</button>
+      <button class="btn-copy" onclick="copiar('b1')">Copiar</button>
       <div class="rtext" id="t1"></div>
     </div>
-
     <div class="rblock" id="b2">
       <div class="rblock-label">Descrição completa — cole no campo "Descrição"</div>
-      <button class="btn-copy" onclick="copiar(&#39;b2&#39;)">Copiar</button>
+      <button class="btn-copy" onclick="copiar('b2')">Copiar</button>
       <div class="rtext" id="t2"></div>
     </div>
-
     <div class="rblock" id="b3">
       <div class="rblock-label">Especificações técnicas — cole após a descrição</div>
-      <button class="btn-copy" onclick="copiar(&#39;b3&#39;)">Copiar</button>
+      <button class="btn-copy" onclick="copiar('b3')">Copiar</button>
       <div class="rtext" id="t3"></div>
     </div>
-
     <div class="rblock" id="b4">
-      <div class="rblock-label">Título SEO — cole em "Listagem em mecanismos de pesquisa → Título"</div>
-      <button class="btn-copy" onclick="copiar(&#39;b4&#39;)">Copiar</button>
+      <div class="rblock-label">Título SEO — cole em "Listagem → Título"</div>
+      <button class="btn-copy" onclick="copiar('b4')">Copiar</button>
       <div class="rtext" id="t4"></div>
     </div>
-
     <div class="rblock" id="b5">
       <div class="rblock-label">Meta descrição SEO — cole em "Listagem → Meta descrição"</div>
-      <button class="btn-copy" onclick="copiar(&#39;b5&#39;)">Copiar</button>
+      <button class="btn-copy" onclick="copiar('b5')">Copiar</button>
       <div class="rtext" id="t5"></div>
     </div>
-
     <div class="rblock" id="b6">
-      <div class="rblock-label">Etiquetas Shopify — cole no campo "Etiquetas" separadas por vírgula</div>
-      <button class="btn-copy" onclick="copiar(&#39;b6&#39;)">Copiar</button>
+      <div class="rblock-label">Etiquetas Shopify — cole no campo "Etiquetas"</div>
+      <button class="btn-copy" onclick="copiar('b6')">Copiar</button>
       <div class="rtext" id="t6"></div>
     </div>
-
     <button class="btn-refresh" onclick="gerar()">↻ &nbsp;Gerar nova versão</button>
   </div>
+</div>
 
+<!-- FRASE DE DEUS — SEMPRE VISÍVEL -->
+<div id="frase-deus">
+  <span>🙏 "Mi negócio es el negócio de Dios y los negócios de Dios nunca fracasan, vai."</span>
 </div>
 
 <script>
-async function gerar() {
-  const key     = document.getElementById('apiKey').value.trim();
-  const nomeAli = document.getElementById('nomeAli').value.trim();
-  const descAli = document.getElementById('descAli').value.trim();
-  const preco   = document.getElementById('preco').value.trim();
-  const cat     = document.getElementById('cat').value;
-
-  document.getElementById('err').style.display = 'none';
-  document.getElementById('results').style.display = 'none';
-
-  if (!key)     return erro('Cole sua chave da API Anthropic no campo acima.');
-  if (!nomeAli) return erro('Cole o nome do produto do AliExpress.');
-  if (!descAli) return erro('Cole a descrição do produto do AliExpress.');
-
-  document.getElementById('load').style.display = 'block';
-  document.querySelector('.btn-main').disabled = true;
-
-  const prompt = `Você é especialista em copywriting para e-commerce de luxo brasileiro.
+async function gerar(){
+  const key=document.getElementById('apiKey').value.trim();
+  const nomeAli=document.getElementById('nomeAli').value.trim();
+  const descAli=document.getElementById('descAli').value.trim();
+  const preco=document.getElementById('preco').value.trim();
+  const cat=document.getElementById('cat').value;
+  document.getElementById('err').style.display='none';
+  document.getElementById('results').style.display='none';
+  if(!key)return erro('Cole sua chave da API Anthropic no campo acima.');
+  if(!nomeAli)return erro('Cole o nome do produto do AliExpress.');
+  if(!descAli)return erro('Cole a descrição do produto do AliExpress.');
+  document.getElementById('load').style.display='block';
+  document.querySelector('.btn-main').disabled=true;
+  const prompt=`Você é especialista em copywriting para e-commerce de luxo brasileiro.
 A marca "Tudo Cozinha" vende produtos premium para famílias brasileiras apaixonadas por cozinha e churrasco.
 Tom da marca: sofisticado, emotivo, artesanal, que valoriza momentos em família e ritual do churrasco.
 NUNCA mencione China, AliExpress, fornecedor ou origem do produto.
@@ -221,87 +167,30 @@ Escreva sempre em português brasileiro impecável.
 Dados brutos do fornecedor:
 Nome: ${nomeAli}
 Descrição: ${descAli}
-${preco ? 'Preço: R$ ' + preco : ''}
+${preco?'Preço: R$ '+preco:''}
 Categoria: ${cat}
 
 Gere SOMENTE JSON válido sem markdown, sem texto extra:
-{
-  "titulo": "título premium para Shopify, máximo 60 caracteres, emotivo e específico",
-  "descricao": "descrição completa com 3 parágrafos: 1) abertura emotiva conectando ao ritual do churrasco/cozinha, 2) apresentação do produto e seus diferenciais reais, 3) fechamento inspirador. Use ✓ para bullets de benefícios no final. Máximo 300 palavras.",
-  "specs": "especificações técnicas limpas e relevantes extraídas dos dados brutos, formato: • Material: xxx\\n• Dimensões: xxx\\n• Conteúdo da caixa: xxx (apenas o que tiver nos dados, sem inventar)",
-  "seo_titulo": "título SEO otimizado, máximo 60 caracteres, inclui palavra-chave principal",
-  "seo_desc": "meta descrição SEO, máximo 155 caracteres, persuasiva e com palavra-chave",
-  "etiquetas": "15 a 20 etiquetas Shopify separadas por vírgula, em português, misturando: categoria, material, uso, ocasião, público-alvo e estilo de vida. Foco em termos que brasileiros buscam ao comprar produtos premium de cozinha e churrasco. Sem # e sem espaços extras."
-}`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1400,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    if (!res.ok) {
-      const e = await res.json().catch(() => ({}));
-      throw new Error(e?.error?.message || 'Erro HTTP ' + res.status);
-    }
-
-    const data = await res.json();
-    let raw = data?.content?.[0]?.text?.trim() || '';
-
+{"titulo":"título premium para Shopify, máximo 60 caracteres, emotivo e específico","descricao":"descrição completa com 3 parágrafos: 1) abertura emotiva conectando ao ritual do churrasco/cozinha, 2) apresentação do produto e seus diferenciais reais, 3) fechamento inspirador. Use ✓ para bullets de benefícios no final. Máximo 300 palavras.","specs":"especificações técnicas limpas e relevantes extraídas dos dados brutos, formato: • Material: xxx\\n• Dimensões: xxx\\n• Conteúdo da caixa: xxx (apenas o que tiver nos dados, sem inventar)","seo_titulo":"título SEO otimizado, máximo 60 caracteres, inclui palavra-chave principal","seo_desc":"meta descrição SEO, máximo 155 caracteres, persuasiva e com palavra-chave","etiquetas":"15 a 20 etiquetas Shopify separadas por vírgula, em português, misturando: categoria, material, uso, ocasião, público-alvo e estilo de vida."}`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1400,messages:[{role:'user',content:prompt}]})});
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||'Erro HTTP '+res.status);}
+    const data=await res.json();
+    let raw=data?.content?.[0]?.text?.trim()||'';
     let json;
-    try { json = JSON.parse(raw); }
-    catch {
-      const m = raw.match(/\{[\s\S]*\}/);
-      if (m) json = JSON.parse(m[0]);
-      else throw new Error('Resposta fora do formato. Tente novamente.');
-    }
-
-    document.getElementById('t1').textContent = json.titulo    || '';
-    document.getElementById('t2').textContent = json.descricao || '';
-    document.getElementById('t3').textContent = json.specs     || '';
-    document.getElementById('t4').textContent = json.seo_titulo|| '';
-    document.getElementById('t5').textContent = json.seo_desc  || '';
-    document.getElementById('t6').textContent = json.etiquetas || '';
-
-    document.getElementById('load').style.display = 'none';
-    document.getElementById('results').style.display = 'block';
-
-  } catch(e) {
-    erro('Erro: ' + e.message);
-  } finally {
-    document.querySelector('.btn-main').disabled = false;
-    document.getElementById('load').style.display = 'none';
-  }
+    try{json=JSON.parse(raw);}catch{const m=raw.match(/\{[\s\S]*\}/);if(m)json=JSON.parse(m[0]);else throw new Error('Resposta fora do formato. Tente novamente.');}
+    document.getElementById('t1').textContent=json.titulo||'';
+    document.getElementById('t2').textContent=json.descricao||'';
+    document.getElementById('t3').textContent=json.specs||'';
+    document.getElementById('t4').textContent=json.seo_titulo||'';
+    document.getElementById('t5').textContent=json.seo_desc||'';
+    document.getElementById('t6').textContent=json.etiquetas||'';
+    document.getElementById('load').style.display='none';
+    document.getElementById('results').style.display='block';
+  }catch(e){erro('Erro: '+e.message);}finally{document.querySelector('.btn-main').disabled=false;document.getElementById('load').style.display='none';}
 }
-
-function erro(msg) {
-  const el = document.getElementById('err');
-  el.textContent = msg;
-  el.style.display = 'block';
-  document.getElementById('load').style.display = 'none';
-  document.querySelector('.btn-main').disabled = false;
-}
-
-function copiar(id) {
-  const txt = document.getElementById(id).querySelector('.rtext').textContent;
-  const btn = document.getElementById(id).querySelector('.btn-copy');
-  navigator.clipboard.writeText(txt).then(() => {
-    btn.textContent = '✓ Copiado';
-    btn.classList.add('ok');
-    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('ok'); }, 2200);
-  });
-}
+function erro(msg){const el=document.getElementById('err');el.textContent=msg;el.style.display='block';document.getElementById('load').style.display='none';document.querySelector('.btn-main').disabled=false;}
+function copiar(id){const txt=document.getElementById(id).querySelector('.rtext').textContent;const btn=document.getElementById(id).querySelector('.btn-copy');navigator.clipboard.writeText(txt).then(()=>{btn.textContent='✓ Copiado';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2200);});}
 </script>
-
-
-</body></html>
+</body>
+</html>
