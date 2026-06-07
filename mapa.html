@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)file:///C:/Users/COMFORMAK/Downloads/mapa.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tudo Cozinha — Mapa do Primeiro Milhão</title>
+<link href="./Tudo Cozinha — Mapa do Primeiro Milhão_files/css2" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#c9a84c;--wine:#8b1a2f;--dark:#0d0d0d;--cream:#f0e6cc;--green:#00ff88;--red:#ff4444;--blue:#4488ff;--purple:#9944ff}
+html,body{background:var(--dark);font-family:'Press Start 2P',monospace;color:var(--cream);min-height:100vh}
+
+/* INTRO */
+#intro{position:fixed;inset:0;background:#000;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;text-align:center}
+#intro h1{font-size:clamp(10px,3vw,18px);color:var(--gold);line-height:2}
+#intro .sub{font-size:clamp(6px,1.5vw,9px);color:#888;line-height:2.2}
+#intro .frase{font-size:clamp(6px,1.8vw,10px);color:var(--cream);line-height:2;border:1px solid var(--gold);padding:14px 18px;max-width:500px;margin:8px 0}
+#intro .frase span{color:var(--gold)}
+#btn-start{font-family:'Press Start 2P',monospace;font-size:clamp(7px,2vw,11px);padding:12px 24px;background:var(--gold);color:#000;border:none;cursor:pointer;margin-top:8px;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+#btn-start:hover{background:#ffd700;animation:none}
+
+/* HUD */
+#hud{background:#000;border-bottom:3px solid var(--gold);padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.hud-block{font-size:5px;color:#888;line-height:2}
+.hud-val{color:var(--gold);font-size:7px}
+#prog-wrap{flex:1;min-width:160px}
+#prog-bar{height:10px;background:#111;border:2px solid var(--gold);margin-top:3px}
+#prog-fill{height:100%;background:linear-gradient(90deg,var(--wine),var(--gold));transition:width 1.2s;width:8%}
+#prog-label{font-size:5px;color:#666;margin-top:2px}
+
+/* NAV */
+#nav{display:flex;gap:4px;padding:8px 10px;background:#050505;border-bottom:1px solid #222;flex-wrap:wrap}
+.nav-btn{font-family:'Press Start 2P',monospace;font-size:5px;padding:6px 8px;background:#111;border:1px solid #333;color:#888;cursor:pointer;border-radius:2px;transition:all .2s}
+.nav-btn.active,.nav-btn:hover{background:var(--gold);color:#000;border-color:var(--gold)}
+
+/* VIEWS */
+.view{display:none;padding:10px}
+.view.active{display:block}
+
+/* FRASE DESTAQUE */
+.frase-banner{background:#0a0500;border:1px solid var(--gold);padding:10px 14px;margin-bottom:12px;text-align:center;font-size:6px;color:var(--cream);line-height:2}
+.frase-banner span{color:var(--gold)}
+
+/* MAP */
+.world{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:4px;margin-bottom:12px;overflow:hidden}
+.world-header{padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #111;background:#050505}
+.world-icon{font-size:16px}
+.world-name{font-size:6px;color:var(--gold)}
+.world-prog{font-size:5px;color:#444;margin-left:auto}
+.nodes-row{display:flex;align-items:center;padding:12px;gap:0;flex-wrap:wrap;justify-content:center}
+.path-dots{display:flex;gap:3px;align-items:center;padding:0 4px}
+.path-dot{width:5px;height:5px;background:#1a1a1a;border-radius:50%}
+.node{width:62px;height:62px;border:3px solid;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform .1s;flex-shrink:0;margin:4px}
+.node:hover{transform:translateY(-3px)}
+.node:active{transform:scale(.93)}
+.node.done{border-color:var(--green);background:#001a0d;box-shadow:0 4px 0 #003d1a}
+.node.active{border-color:var(--red);background:#1a0000;box-shadow:0 4px 0 #660000;animation:pulse 1.2s infinite}
+.node.locked{border-color:#1a1a1a;background:#080808;opacity:.45;cursor:not-allowed}
+.node.blocked{border-color:var(--wine);background:#12000a;box-shadow:0 4px 0 #500010;cursor:pointer}
+@keyframes pulse{0%,100%{box-shadow:0 4px 0 #660000,0 0 10px #ff444422}50%{box-shadow:0 4px 0 #660000,0 0 18px #ff444455}}
+.node-icon{font-size:20px;line-height:1}
+.node-id{font-size:4px;color:#444;margin-top:2px}
+.node-label{font-size:4px;color:#666;margin-top:1px;text-align:center;max-width:58px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.star-b{position:absolute;top:-7px;right:-7px;background:var(--gold);color:#000;font-size:5px;width:15px;height:15px;display:flex;align-items:center;justify-content:center;border:2px solid #000;border-radius:50%}
+.pay-b{position:absolute;top:-7px;right:-7px;background:var(--wine);color:#fff;font-size:5px;width:15px;height:15px;display:flex;align-items:center;justify-content:center;border:2px solid #000;border-radius:50%}
+
+/* MODAL */
+#modal{display:none;position:fixed;inset:0;background:#000000e0;z-index:200;align-items:center;justify-content:center;padding:12px}
+#modal.open{display:flex}
+#mbox{background:#0a0a0a;border:3px solid var(--gold);width:100%;max-width:420px;max-height:92vh;overflow-y:auto;position:relative}
+#mbox::-webkit-scrollbar{width:3px}
+#mbox::-webkit-scrollbar-thumb{background:var(--gold)}
+.mhead{background:#050505;padding:12px 14px;border-bottom:2px solid #111;display:flex;align-items:center;gap:10px}
+.mhead-icon{font-size:22px}
+.mhead-info{flex:1}
+.mhead-id{font-size:5px;color:#444}
+.mhead-title{font-size:8px;color:var(--gold);margin-top:3px;line-height:1.6}
+.mbody{padding:14px}
+.status-pill{display:inline-block;padding:3px 8px;font-size:5px;border:1px solid;border-radius:2px;margin-bottom:10px}
+.p-done{color:var(--green);border-color:var(--green)}
+.p-active{color:var(--red);border-color:var(--red)}
+.p-locked{color:#333;border-color:#222}
+.p-blocked{color:var(--wine);border-color:var(--wine)}
+.mdesc{font-size:6px;color:#999;line-height:2.2;margin-bottom:12px;font-family:sans-serif;font-weight:400}
+.sec-label{font-size:5px;color:var(--gold);margin-bottom:6px;border-bottom:1px solid #111;padding-bottom:4px;margin-top:10px}
+.task{display:flex;align-items:flex-start;gap:7px;margin-bottom:7px;cursor:pointer;padding:2px 0}
+.tchk{width:13px;height:13px;border:1.5px solid #2a2a2a;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;transition:all .2s;margin-top:1px}
+.tchk.done{border-color:var(--green);background:#001a0d;color:var(--green)}
+.ttxt{font-size:6px;color:#777;line-height:1.9;font-family:sans-serif;font-weight:400}
+.ttxt.done{color:#004d1a;text-decoration:line-through}
+.reward-box{background:#080500;border:1px solid #1a1000;padding:9px;margin:10px 0}
+.reward-label{font-size:5px;color:var(--gold);margin-bottom:4px}
+.reward-val{font-size:7px;color:#ffd700;line-height:1.8}
+.prompt-box{background:#03050f;border:1px solid #0a1a3a;padding:10px;margin:10px 0}
+.prompt-label{font-size:5px;color:var(--blue);margin-bottom:6px}
+.prompt-txt{font-size:6px;color:#99aacc;line-height:1.9;font-family:monospace;word-break:break-word}
+.btn-copy{font-family:'Press Start 2P',monospace;font-size:5px;padding:7px;background:var(--blue);color:#000;border:none;cursor:pointer;width:100%;margin-top:6px}
+.btn-copy:hover{background:#66aaff}
+.btn-close{font-family:'Press Start 2P',monospace;font-size:5px;padding:9px;background:var(--gold);color:#000;border:none;cursor:pointer;width:100%;margin-top:6px}
+.btn-close:hover{background:#ffd700}
+.copied-ok{background:var(--green)!important;color:#000!important}
+
+/* DASHBOARD */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px}
+.dash-card{background:#0a0a0a;border:1px solid #1a1a1a;padding:10px;border-radius:2px}
+.dash-label{font-size:5px;color:#444;margin-bottom:5px}
+.dash-val{font-size:12px;color:var(--gold)}
+.dash-sub{font-size:4px;color:#333;margin-top:3px}
+.act-box{background:#0a0a0a;border:1px solid #1a1a1a;padding:10px;margin-bottom:8px}
+.act-title{font-size:6px;color:var(--gold);margin-bottom:10px}
+.act-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #0d0d0d}
+.act-icon{font-size:14px;flex-shrink:0}
+.act-info{}
+.act-text{font-size:5px;color:#777;font-family:sans-serif;line-height:1.8}
+.act-fase{font-size:4px;color:#333;margin-top:2px}
+
+/* PROMPTS VIEW */
+.prompt-card{background:#0a0a0a;border:1px solid #1a1a1a;padding:12px;margin-bottom:8px;border-radius:2px}
+.pc-hdr{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.pc-icon{font-size:14px}
+.pc-title{font-size:6px;color:var(--gold)}
+.pc-txt{font-size:5px;color:#666;font-family:monospace;line-height:1.9;margin:8px 0;word-break:break-word;background:#050505;padding:8px;border:1px solid #0d0d0d}
+.btn-cp{font-family:'Press Start 2P',monospace;font-size:5px;padding:6px;background:#0a0a0a;color:var(--gold);border:1px solid #2a1a00;cursor:pointer;width:100%}
+.btn-cp:hover,.btn-cp.copied-ok{background:var(--gold);color:#000;border-color:var(--gold)}
+
+/* INFO */
+.info-card{background:#0a0a0a;border:1px solid #1a1a1a;padding:14px;margin-bottom:10px}
+.info-title{font-size:7px;color:var(--gold);margin-bottom:10px}
+.info-body{font-size:6px;color:#777;line-height:2.4;font-family:sans-serif;font-weight:400}
+.info-body b{color:var(--gold);font-family:'Press Start 2P',monospace;font-size:5px}
+.frase-destaque{background:#050500;border:2px solid var(--gold);padding:12px;text-align:center;font-size:7px;color:var(--cream);line-height:2;margin:10px 0}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- INTRO SCREEN -->
+<div id="intro" style="display: none;">
+  <div style="font-size:clamp(8px,2vw,13px);color:var(--gold);letter-spacing:4px">TUDO COZINHA</div>
+  <div class="sub">MAPA DO PRIMEIRO MILHÃO</div>
+  <div class="frase">
+    <span>"Mi negócio es el negócio de Dios</span><br>
+    y los negócios de Dios nunca fracasan, vai."
+  </div>
+  <div style="font-size:5px;color:#444;line-height:2">🙏 Juan × Claude — Parceiros na Missão</div>
+  <button id="btn-start" onclick="startGame()">▶ INICIAR MISSÃO</button>
+  <div style="font-size:4px;color:#222;margin-top:8px">v3.0 — App 3 de 3 • tudocozinha.github.io</div>
+</div>
+
+<!-- GAME UI -->
+<div id="game" style="display: block;">
+
+<div id="hud">
+  <div class="hud-block">OPERADOR<br><span class="hud-val">JUAN 🙏</span></div>
+  <div class="hud-block">FASE ATUAL<br><span class="hud-val" id="h-fase">2-1</span></div>
+  <div class="hud-block" id="prog-wrap">META: R$ 1.000.000
+    <div id="prog-bar"><div id="prog-fill" style="width: 23%;"></div></div>
+    <div id="prog-label">3 de 13 fases concluídas (23%)</div>
+  </div>
+  <div class="hud-block">VIDAS<br><span class="hud-val">♥ ♥ ♥</span></div>
+</div>
+
+<div id="nav">
+  <button class="nav-btn active" onclick="showView(&#39;map&#39;,this)">🗺️ MAPA</button>
+  <button class="nav-btn" onclick="showView(&#39;dash&#39;,this)">📊 DASH</button>
+  <button class="nav-btn" onclick="showView(&#39;prompts&#39;,this)">💬 PROMPTS</button>
+  <button class="nav-btn" onclick="showView(&#39;info&#39;,this)">ℹ️ COMO USAR</button>
+</div>
+
+<div class="view active" id="view-map">
+  <div class="frase-banner">🙏 <span>"Mi negócio es el negócio de Dios y los negócios de Dios nunca fracasan, vai."</span></div>
+  <div id="map-content"><div class="world"><div class="world-header"><div class="world-icon">🏗️</div><div class="world-name">MUNDO 1 — FUNDAÇÃO</div><div class="world-prog">3/3 ★</div></div><div class="nodes-row"><div class="node done"><div class="node-icon">🏪</div><div class="node-id">1-1</div><div class="node-label">LOJA BASE</div><div class="star-b">★</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node done"><div class="node-icon">📦</div><div class="node-id">1-2</div><div class="node-label">PRODUTOS</div><div class="star-b">★</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node done"><div class="node-icon">🎨</div><div class="node-id">1-3</div><div class="node-label">BRAND</div><div class="star-b">★</div></div></div></div><div class="world"><div class="world-header"><div class="world-icon">🔥</div><div class="world-name">MUNDO 2 — EXPERIÊNCIA DA LOJA</div><div class="world-prog">0/3 ★</div></div><div class="nodes-row"><div class="node active"><div class="node-icon">🥩</div><div class="node-id">2-1</div><div class="node-label">CHURRASCO 5★</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node active"><div class="node-icon">📄</div><div class="node-id">2-2</div><div class="node-label">PÁGINAS</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node active"><div class="node-icon">💎</div><div class="node-id">2-3</div><div class="node-label">PRODUTOS ★</div></div></div></div><div class="world"><div class="world-header"><div class="world-icon">📦</div><div class="world-name">MUNDO 3 — OPERAÇÃO &amp; RASTREIO</div><div class="world-prog">0/2 ★</div></div><div class="nodes-row"><div class="node blocked"><div class="node-icon">🔍</div><div class="node-id">3-1</div><div class="node-label">RASTREIO</div><div class="pay-b">💳</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node locked"><div class="node-icon">🏭</div><div class="node-id">3-2</div><div class="node-label">FORNECEDOR BR</div></div></div></div><div class="world"><div class="world-header"><div class="world-icon">📱</div><div class="world-name">MUNDO 4 — CONTEÚDO &amp; TRÁFEGO</div><div class="world-prog">0/3 ★</div></div><div class="nodes-row"><div class="node active"><div class="node-icon">🎬</div><div class="node-id">4-1</div><div class="node-label">TIKTOK SHOP</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node locked"><div class="node-icon">📸</div><div class="node-id">4-2</div><div class="node-label">9 POSTS FEED</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node locked"><div class="node-icon">💰</div><div class="node-id">4-3</div><div class="node-label">META ADS</div></div></div></div><div class="world"><div class="world-header"><div class="world-icon">🚀</div><div class="world-name">MUNDO 5 — ESCALA &amp; AUTOMAÇÃO</div><div class="world-prog">0/2 ★</div></div><div class="nodes-row"><div class="node locked"><div class="node-icon">⚙️</div><div class="node-id">5-1</div><div class="node-label">PIPELINE AUTO</div></div><div class="path-dots"><div class="path-dot"></div><div class="path-dot"></div><div class="path-dot"></div></div><div class="node locked"><div class="node-icon">🏆</div><div class="node-id">5-2</div><div class="node-label">BOSS FINAL</div></div></div></div></div>
+</div>
+
+<div class="view" id="view-dash">
+  <div class="frase-banner">🔥 <span>Deus na frente — sempre.</span> Progresso em tempo real.</div>
+  <div class="dash-grid">
+    <div class="dash-card"><div class="dash-label">FASES COMPLETAS</div><div class="dash-val" id="d-done">3</div><div class="dash-sub">missões concluídas</div></div>
+    <div class="dash-card"><div class="dash-label">EM ANDAMENTO</div><div class="dash-val" id="d-active" style="color:var(--red)">4</div><div class="dash-sub">fases simultâneas</div></div>
+    <div class="dash-card"><div class="dash-label">BLOQUEADAS $</div><div class="dash-val" id="d-blocked" style="color:var(--wine)">1</div><div class="dash-sub">aguardam pagamento</div></div>
+    <div class="dash-card"><div class="dash-label">PROGRESSO</div><div class="dash-val" id="d-pct" style="color:var(--green)">23%</div><div class="dash-sub">rumo ao 1º milhão</div></div>
+  </div>
+  <div class="act-box">
+    <div class="act-title">📋 LOG DE ATIVIDADES</div>
+    <div class="act-item"><div class="act-icon">✅</div><div class="act-info"><div class="act-text">Canyon dark theme + Mercado Pago + PIX configurados</div><div class="act-fase">FASE 1-1 — CONCLUÍDA</div></div></div>
+    <div class="act-item"><div class="act-icon">✅</div><div class="act-info"><div class="act-text">DSers + AliExpress + frete grátis Brasil + Afiador R$866</div><div class="act-fase">FASE 1-2 — CONCLUÍDA</div></div></div>
+    <div class="act-item"><div class="act-icon">✅</div><div class="act-info"><div class="act-text">Brand premium, Canva Pro, Apps GitHub Pages (index + posts)</div><div class="act-fase">FASE 1-3 — CONCLUÍDA</div></div></div>
+    <div class="act-item"><div class="act-icon">🔥</div><div class="act-info"><div class="act-text">TikTok Shop aprovado — pixel + warehouse Bauru configurados</div><div class="act-fase">FASE 4-1 — EM ANDAMENTO</div></div></div>
+    <div class="act-item"><div class="act-icon">🎵</div><div class="act-info"><div class="act-text">Som "fire" baixado da YouTube Audio Library — aguarda embed Canyon</div><div class="act-fase">FASE 2-1 — EM ANDAMENTO</div></div></div>
+    <div class="act-item"><div class="act-icon">💳</div><div class="act-info"><div class="act-text">Rastreio.io integrado mas não configurado — aguarda pagamento</div><div class="act-fase">FASE 3-1 — BLOQUEADA</div></div></div>
+    <div class="act-item"><div class="act-icon">🗺️</div><div class="act-info"><div class="act-text">App Mapa do Primeiro Milhão criado — missão em andamento!</div><div class="act-fase">HOJE — 🙏</div></div></div>
+  </div>
+</div>
+
+<div class="view" id="view-prompts">
+  <div class="frase-banner"><span>"sou o Juan, Tudo Cozinha, estou na fase [X] — vamos trabalhar nisso"</span><br><span style="color:#555;font-size:4px">— cole sempre essa frase ao abrir nova conversa com o Claude</span></div>
+  <div id="prompts-content"><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🏪</div><div class="pc-title">FASE 1-1 — Shopify Canyon no Ar</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 1-1 — quero revisar a configuração base do meu Shopify Canyon. Paleta gold #c9a84c / black #0d0d0d / wine #8b1a2f / cream #f0e6cc. Tem algo importante que ainda falta na fundação da loja?</div><button class="btn-cp" onclick="cpPrompt(&#39;1-1&#39;,this)">📋 COPIAR FASE 1-1</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">📦</div><div class="pc-title">FASE 1-2 — Catálogo DSers + AliExpress</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 1-2 — quero expandir meu catálogo DSers/AliExpress com novos produtos de cozinha e churrasco premium. Me ajuda a criar critérios de seleção para garantir qualidade real e não enganar o público</div><button class="btn-cp" onclick="cpPrompt(&#39;1-2&#39;,this)">📋 COPIAR FASE 1-2</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🎨</div><div class="pc-title">FASE 1-3 — Identidade Visual Completa</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 1-3 — quero evoluir a identidade visual e criar novos templates. Canva Pro ativo. Paleta gold/black/wine/cream. Como posso elevar ainda mais o brand para o nível premium que quero?</div><button class="btn-cp" onclick="cpPrompt(&#39;1-3&#39;,this)">📋 COPIAR FASE 1-3</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🥩</div><div class="pc-title">FASE 2-1 — Ambiente Temático Premium</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 2-1 — preciso do código Liquid completo para embedar o áudio fire.mp3 no Canyon com autoplay silencioso em loop + botão toggle elegante. A URL do arquivo estará no Shopify CDN. Lembrando: no Canyon o CSS customizado só funciona em bloco Liquid direto, nunca em arquivo externo</div><button class="btn-cp" onclick="cpPrompt(&#39;2-1&#39;,this)">📋 COPIAR FASE 2-1</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">📄</div><div class="pc-title">FASE 2-2 — Padronização Total das Páginas</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 2-2 — precisa de um prompt certeiro para o Sidekick listar todas as páginas da minha loja Canyon e padronizá-las. Quero trocar 'Desenvolvido por Shopify' por 'Desenvolvido por Tudo Cozinha' e personalizar a tela de loja pausada com meu logo. Como fazer isso no Canyon?</div><button class="btn-cp" onclick="cpPrompt(&#39;2-2&#39;,this)">📋 COPIAR FASE 2-2</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">💎</div><div class="pc-title">FASE 2-3 — Curadoria Produtos Premium Reais</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 2-3 — quero criar critérios rígidos de curadoria para produtos de cozinha e churrasco premium. Não posso enganar meu público. Me ajuda a definir o que qualifica um produto como realmente premium e listar candidatos no AliExpress/DSers</div><button class="btn-cp" onclick="cpPrompt(&#39;2-3&#39;,this)">📋 COPIAR FASE 2-3</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🔍</div><div class="pc-title">FASE 3-1 — Rastreio.io — Configuração Completa</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 3-1 — acabei de pagar o plano do Rastreio.io. O app já está integrado no Shopify. Preciso configurar completamente os templates de mensagem WhatsApp com branding Tudo Cozinha. Me guia passo a passo</div><button class="btn-cp" onclick="cpPrompt(&#39;3-1&#39;,this)">📋 COPIAR FASE 3-1</button></div><div class="prompt-card"><div class="pc-hdr"><div class="pc-icon">🎬</div><div class="pc-title">FASE 4-1 — TikTok Shop — Primeiras Vendas</div></div><div class="pc-txt">sou o Juan, Tudo Cozinha, estou na fase 4-1 — TikTok Shop aprovado e configurado. Preciso de um roteiro completo para os 9 primeiros vídeos que vão ativar o algoritmo e gerar vendas. Produtos de cozinha e churrasco premium. Estética dark luxury gold/black</div><button class="btn-cp" onclick="cpPrompt(&#39;4-1&#39;,this)">📋 COPIAR FASE 4-1</button></div></div>
+</div>
+
+<div class="view" id="view-info">
+  <div class="frase-destaque">🙏 "Mi negócio es el negócio de Dios<br>y los negócios de Dios nunca fracasan, vai."</div>
+  <div class="info-card">
+    <div class="info-title">🎮 COMO USAR ESTE MAPA</div>
+    <div class="info-body">
+      <b>1. MAPA</b> — Veja todas as fases organizadas por mundo. Clique em qualquer node (exceto 🔒 bloqueados) para abrir os detalhes, checklist e prompt.<br><br>
+      <b>2. CHECKLIST</b> — Dentro de cada fase, clique nas tarefas para marcar como concluído. O progresso salva automaticamente no seu navegador.<br><br>
+      <b>3. PROMPTS</b> — Cada fase tem um prompt pronto para copiar. Cole no Claude sempre iniciando com: <span style="color:var(--gold);font-family:&#39;Press Start 2P&#39;,monospace;font-size:5px">"sou o Juan, Tudo Cozinha, estou na fase X"</span><br><br>
+      <b>4. FASES VERMELHAS ►</b> — Em andamento. Foco aqui agora.<br><br>
+      <b style="color:var(--wine)">5. FASES 💳</b> — Bloqueadas por pagamento. Quando pagar, avisa o Claude e desbloqueamos juntos na próxima versão do app.<br><br>
+      <b>6. ATUALIZAR</b> — Quando uma fase evoluir, me avisa no Claude. Gero o código novo e você substitui o mapa.html no GitHub. Simples assim.<br><br>
+      <b>7. PARCERIA</b> — Juan lidera com visão + Deus na frente + Claude estrutura + Sidekick executa no Shopify. Esse esquema nunca muda.
+    </div>
+  </div>
+  <div class="info-card">
+    <div class="info-title">🔗 LINKS IMPORTANTES</div>
+    <div class="info-body">
+      <b>App 1</b> — Gerador de Descrições: <span style="color:var(--blue)">tudocozinha.github.io/Tudo-Cozinha/index.html</span><br><br>
+      <b>App 2</b> — Gerador de Posts Meta: <span style="color:var(--blue)">tudocozinha.github.io/Tudo-Cozinha/posts.html</span><br><br>
+      <b>App 3</b> — Mapa do Primeiro Milhão: <span style="color:var(--gold)">tudocozinha.github.io/Tudo-Cozinha/mapa.html</span><br><br>
+      <b>Loja</b> — tudocozinha.com.br<br><br>
+      <b>Canal</b> — @TudoCozinhaBR (YouTube)
+    </div>
+  </div>
+</div>
+
+</div><!-- /game -->
+
+<!-- MODAL -->
+<div id="modal" class="">
+  <div id="mbox">
+    <div class="mhead">
+      <div class="mhead-icon" id="m-icon">🎨</div>
+      <div class="mhead-info">
+        <div class="mhead-id" id="m-id">FASE 1-3</div>
+        <div class="mhead-title" id="m-title">Identidade Visual Completa</div>
+      </div>
+    </div>
+    <div class="mbody">
+      <div id="m-status"><div class="status-pill p-done">✓ CONCLUÍDO</div></div>
+      <div class="mdesc" id="m-desc">Logo, cores, templates Canva Pro padronizados. Kit de mídias definido (1080x1080, 1080x1350, 1920x1080, 1080x1920). Apps GitHub Pages funcionando.</div>
+      <div class="sec-label">✓ CHECKLIST DA FASE</div>
+      <div id="m-tasks"><div class="task"><div class="tchk done">✓</div><div class="ttxt done">Logo Tudo Cozinha finalizado</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">Paleta oficial estabelecida</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">Templates Canva Pro criados</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">Canal @TudoCozinhaBR criado</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">App 1: Gerador de descrições ativo</div></div><div class="task"><div class="tchk done">✓</div><div class="ttxt done">App 2: Gerador de posts Meta ativo</div></div></div>
+      <div class="reward-box">
+        <div class="reward-label">🏆 RECOMPENSA</div>
+        <div class="reward-val" id="m-reward">Brand premium reconhecível — fundação de autoridade</div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-label">💬 PROMPT PARA O CLAUDE</div>
+        <div class="prompt-txt" id="m-prompt">sou o Juan, Tudo Cozinha, estou na fase 1-3 — quero evoluir a identidade visual e criar novos templates. Canva Pro ativo. Paleta gold/black/wine/cream. Como posso elevar ainda mais o brand para o nível premium que quero?</div>
+        <button class="btn-copy" id="m-copy-btn" onclick="copyModalPrompt()">📋 COPIAR PROMPT</button>
+      </div>
+      <button class="btn-close" onclick="closeModal()">✕ FECHAR FASE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const WORLDS=[
+  {name:"MUNDO 1 — FUNDAÇÃO",icon:"🏗️",nodes:[
+    {id:"1-1",icon:"🏪",label:"LOJA BASE",st:"done",
+     title:"Shopify Canyon no Ar",
+     desc:"Base da loja construída com estética dark luxury. Mercado Pago, PIX, políticas LGPD/CDC. Canyon theme com paleta gold/black/wine ativa.",
+     tasks:[["Canyon dark theme gold/black/wine ativo",true],["Mercado Pago + PIX conectado",true],["Políticas CDC/LGPD/Privacidade criadas",true],["Domínio tudocozinha.com.br ativo",true],["Sticky header + ícones SVG personalizados",true]],
+     reward:"Base operacional 100% — Alicerce do império",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 1-1 — quero revisar a configuração base do meu Shopify Canyon. Paleta gold #c9a84c / black #0d0d0d / wine #8b1a2f / cream #f0e6cc. Tem algo importante que ainda falta na fundação da loja?"},
+    {id:"1-2",icon:"📦",label:"PRODUTOS",st:"done",
+     title:"Catálogo DSers + AliExpress",
+     desc:"DSers integrado com AliExpress. Frete grátis Brasil 5-8 dias úteis. Markup em 3 níveis configurado. Primeiro produto: Afiador de Facas Artesanal R$866.",
+     tasks:[["DSers configurado e integrado",true],["Markup 3 níveis ativo",true],["Frete grátis Brasil 5-8 dias",true],["Afiador de Facas Artesanal R$866 publicado",true],["Vídeo produto no YouTube (não listado)",true]],
+     reward:"Dropshipping operacional com margem premium",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 1-2 — quero expandir meu catálogo DSers/AliExpress com novos produtos de cozinha e churrasco premium. Me ajuda a criar critérios de seleção para garantir qualidade real e não enganar o público"},
+    {id:"1-3",icon:"🎨",label:"BRAND",st:"done",
+     title:"Identidade Visual Completa",
+     desc:"Logo, cores, templates Canva Pro padronizados. Kit de mídias definido (1080x1080, 1080x1350, 1920x1080, 1080x1920). Apps GitHub Pages funcionando.",
+     tasks:[["Logo Tudo Cozinha finalizado",true],["Paleta oficial estabelecida",true],["Templates Canva Pro criados",true],["Canal @TudoCozinhaBR criado",true],["App 1: Gerador de descrições ativo",true],["App 2: Gerador de posts Meta ativo",true]],
+     reward:"Brand premium reconhecível — fundação de autoridade",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 1-3 — quero evoluir a identidade visual e criar novos templates. Canva Pro ativo. Paleta gold/black/wine/cream. Como posso elevar ainda mais o brand para o nível premium que quero?"},
+  ]},
+  {name:"MUNDO 2 — EXPERIÊNCIA DA LOJA",icon:"🔥",nodes:[
+    {id:"2-1",icon:"🥩",label:"CHURRASCO 5★",st:"active",
+     title:"Ambiente Temático Premium",
+     desc:"Transformar a loja num restaurante de churrasco 5 estrelas online. Vídeo loop de brasa na homepage + áudio ambiente fire.mp3 + copy sensorial em cada seção.",
+     tasks:[["Som fire.mp3 baixado (YouTube Audio Library)",true],["Upload fire.mp3 no Shopify (Conteúdo → Arquivos)",false],["Código Liquid embedado no Canyon",false],["Autoplay silencioso + loop infinito ativo",false],["Botão toggle som visível e elegante",false],["Copy sensorial em todas as seções",false]],
+     reward:"Experiência imersiva única — nenhum concorrente tem isso",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 2-1 — preciso do código Liquid completo para embedar o áudio fire.mp3 no Canyon com autoplay silencioso em loop + botão toggle elegante. A URL do arquivo estará no Shopify CDN. Lembrando: no Canyon o CSS customizado só funciona em bloco Liquid direto, nunca em arquivo externo"},
+    {id:"2-2",icon:"📄",label:"PÁGINAS",st:"active",
+     title:"Padronização Total das Páginas",
+     desc:"Mapear TODAS as páginas da loja via Sidekick e padronizar cada detalhe: logo, cores, tipografia, footer. Trocar 'Desenvolvido por Shopify' por 'Desenvolvido por Tudo Cozinha'. Tela de pausa com logo próprio.",
+     tasks:[["Prompt Sidekick para listar todas as páginas",false],["Header/footer padronizados em todas",false],["'Desenvolvido por Tudo Cozinha' no footer",false],["Favicon Tudo Cozinha ativo",false],["Tela de manutenção/pausa com logo próprio",false],["Página 404 customizada com estética TC",false],["Política de cookies personalizada",false]],
+     reward:"Loja 100% autêntica — zero dependência visual do Shopify",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 2-2 — precisa de um prompt certeiro para o Sidekick listar todas as páginas da minha loja Canyon e padronizá-las. Quero trocar 'Desenvolvido por Shopify' por 'Desenvolvido por Tudo Cozinha' e personalizar a tela de loja pausada com meu logo. Como fazer isso no Canyon?"},
+    {id:"2-3",icon:"💎",label:"PRODUTOS ★",st:"active",
+     title:"Curadoria Produtos Premium Reais",
+     desc:"Selecionar produtos de cozinha e churrasco que sejam REALMENTE premium. Qualidade que justifica o preço. Não enganar o público. Pesquisa de fornecedores para próximas fases.",
+     tasks:[["Definir critérios de curadoria premium",false],["Pesquisar 20 produtos candidatos",false],["Selecionar 10 aprovados na curadoria",false],["Fotografar/filmar com padrão Tudo Cozinha",false],["Descrições geradas via App GitHub (index.html)",false],["Posts gerados via App GitHub (posts.html)",false]],
+     reward:"Catálogo que gera confiança, recompra e autoridade",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 2-3 — quero criar critérios rígidos de curadoria para produtos de cozinha e churrasco premium. Não posso enganar meu público. Me ajuda a definir o que qualifica um produto como realmente premium e listar candidatos no AliExpress/DSers"},
+  ]},
+  {name:"MUNDO 3 — OPERAÇÃO & RASTREIO",icon:"📦",nodes:[
+    {id:"3-1",icon:"🔍",label:"RASTREIO",st:"blocked",
+     title:"Rastreio.io — Configuração Completa",
+     desc:"App já integrado ao Shopify mas não configurado. Prova: namorada recebeu mensagens WhatsApp em tempo real rastreando pedido. BLOQUEADO: requer pagamento do plano para configurar templates e notificações completas.",
+     tasks:[["💳 PAGAR plano Rastreio.io",false],["Configurar templates de mensagem WhatsApp",false],["Personalizar mensagens com branding Tudo Cozinha",false],["Ativar notificações automáticas por status",false],["Testar fluxo completo: pedido → entrega",false],["Cliente informado em cada etapa",false]],
+     reward:"Cliente feliz, menos suporte, mais confiança = mais recompra",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 3-1 — acabei de pagar o plano do Rastreio.io. O app já está integrado no Shopify. Preciso configurar completamente os templates de mensagem WhatsApp com branding Tudo Cozinha. Me guia passo a passo"},
+    {id:"3-2",icon:"🏭",label:"FORNECEDOR BR",st:"locked",
+     title:"Fornecedor Nacional TikTok Shop",
+     desc:"TikTok Shop exige entrega rápida para boas avaliações. Fornecedor nacional = 2-3 dias. Tentativa com Dropi não foi adiante. Foco em encontrar parceiro nacional após primeiras vendas consolidadas.",
+     tasks:[["Pesquisar fornecedores nacionais categoria cozinha/churrasco",false],["Contatar mínimo 3 fornecedores",false],["Negociar preço, prazo e exclusividade",false],["Testar pedido piloto",false],["Integrar fornecedor nacional com TikTok Shop",false],["Meta: entrega 2-3 dias úteis",false]],
+     reward:"Entrega expressa = avaliações 5★ = mais vendas TikTok",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 3-2 — quero encontrar fornecedores nacionais de produtos de cozinha e churrasco premium para integrar com TikTok Shop. Preciso de entrega em 2-3 dias. Me ajuda a criar um roteiro de prospecção e critérios de negociação"},
+  ]},
+  {name:"MUNDO 4 — CONTEÚDO & TRÁFEGO",icon:"📱",nodes:[
+    {id:"4-1",icon:"🎬",label:"TIKTOK SHOP",st:"active",
+     title:"TikTok Shop — Primeiras Vendas",
+     desc:"Canal aprovado. Pixel instalado. Warehouse Bauru configurado. Agora criar conteúdo que converte. Estratégia: 9 vídeos para ativar o algoritmo e gerar as primeiras vendas orgânicas.",
+     tasks:[["TikTok Shop aprovado ✓",true],["Pixel TikTok instalado ✓",true],["Warehouse Bauru configurado ✓",true],["Roteiro dos 9 primeiros vídeos criado",false],["3 vídeos publicados",false],["9 vídeos publicados (algoritmo ativado)",false],["Primeira venda TikTok Shop",false]],
+     reward:"Canal de vendas automático ativado — algoritmo trabalhando",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 4-1 — TikTok Shop aprovado e configurado. Preciso de um roteiro completo para os 9 primeiros vídeos que vão ativar o algoritmo e gerar vendas. Produtos de cozinha e churrasco premium. Estética dark luxury gold/black"},
+    {id:"4-2",icon:"📸",label:"9 POSTS FEED",st:"locked",
+     title:"Feed Pronto para Ads",
+     desc:"Regra de ouro: 9 posts consistentes no feed antes de ativar tráfego pago. Credibilidade visual para o público frio que vai ver os ads. Instagram + Facebook com estética premium.",
+     tasks:[["3 posts foto produto premium",false],["3 posts vídeo churrasco/cozinha",false],["3 posts carrossel dicas/lifestyle",false],["Todos agendados no Meta Business Suite",false],["Feed com estética gold/black consistente",false]],
+     reward:"Feed premium pronto — permissão para ligar o tráfego pago",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 4-2 — preciso montar os 9 posts do feed antes de ativar Meta Ads. Me ajuda a criar o calendário editorial com fotos, vídeos e carrosséis. Usar o App 2 (posts.html) para gerar as legendas. Paleta gold/black/wine"},
+    {id:"4-3",icon:"💰",label:"META ADS",st:"locked",
+     title:"Primeira Campanha Paga",
+     desc:"R$30/dia Meta Ads. Público: famílias classe A/B em SP, RJ, BH, Curitiba, Porto Alegre. Produto: kit churrasco premium. Meta: ROAS mínimo 3x para escalar para R$60/dia.",
+     tasks:[["9 posts no feed concluídos",false],["Criativo vídeo 15s editado",false],["Público classe A/B configurado e salvo",false],["Campanha R$30/dia ativa",false],["7 dias consecutivos com ROAS > 3x",false],["Escalar para R$60/dia",false]],
+     reward:"Máquina de vendas paga ligada — escala começa aqui",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 4-3 — vou ativar minha primeira campanha Meta Ads R$30/dia. Produtos de churrasco premium. Público: famílias classe A/B SP, RJ, BH, Curitiba, Porto Alegre. Me ajuda com estrutura de campanha, criativo e configuração de público"},
+  ]},
+  {name:"MUNDO 5 — ESCALA & AUTOMAÇÃO",icon:"🚀",nodes:[
+    {id:"5-1",icon:"⚙️",label:"PIPELINE AUTO",st:"locked",
+     title:"Pipeline 100% Automático",
+     desc:"O negócio roda sozinho. AliExpress → DSers → Shopify → App descrições → App posts → Meta Business Suite agendado. Rastreio.io notificando clientes. Ciclo semanal sem intervenção manual.",
+     tasks:[["5 produtos novos/semana via pipeline",false],["Posts agendados 7 dias à frente sempre",false],["DSers processando pedidos automaticamente",false],["Rastreio.io notificando todos os clientes",false],["Relatório semanal de vendas revisado",false],["Zero intervenção manual por semana",false]],
+     reward:"Negócio roda enquanto você dorme — liberdade real",
+     prompt:"sou o Juan, Tudo Cozinha, estou na fase 5-1 — quero montar o pipeline semanal completo: AliExpress → DSers → Shopify → App GitHub descrições → App GitHub posts → Meta Business Suite. Me ajuda a criar o fluxo operacional semanal com checklist"},
+    {id:"5-2",icon:"🏆",label:"BOSS FINAL",st:"locked",
+     title:"R$ 1.000.000 + Gaming PC + JUANGUZMAN98",
+     desc:"Missão cumprida. Loja automatizada gerando R$1M. Gaming PC comprado com lucro da loja. Canal JUANGUZMAN98 no ar em full HD. JX Imperial reconstruído. Em reconstrução → Tiro dado. 🎯",
+     tasks:[["R$1.000.000 em vendas acumuladas",false],["Gaming PC adquirido com lucro da loja",false],["Canal JUANGUZMAN98 ativo e crescendo",false],["Primeiro vídeo full HD publicado",false],["JX Imperial — clan reconstruído",false],["Próximo mapa mental criado com o Claude",false]],
+     reward:"🎮 GAME COMPLETE — DEUS É FIEL 🙏 — Próximo mapa começa aqui",
+     prompt:"sou o Juan, Tudo Cozinha — chegamos ao primeiro milhão! 🙏 Me ajuda a planejar a próxima fase: estrutura do canal JUANGUZMAN98, investimento do gaming PC e o próximo mapa mental para o segundo projeto. Mi negócio es el negócio de Dios y los negócios de Dios nunca fracasan, vai"},
+  ]},
+];
+
+let currentNode=null;
+
+function startGame(){
+  document.getElementById('intro').style.display='none';
+  document.getElementById('game').style.display='block';
+  buildMap();
+  buildPrompts();
+  updateHUD();
+}
+
+function buildMap(){
+  let c=document.getElementById('map-content');
+  c.innerHTML='';
+  WORLDS.forEach(w=>{
+    let wd=document.createElement('div');wd.className='world';
+    let done=w.nodes.filter(n=>n.st==='done').length;
+    wd.innerHTML=`<div class="world-header"><div class="world-icon">${w.icon}</div><div class="world-name">${w.name}</div><div class="world-prog">${done}/${w.nodes.length} ★</div></div>`;
+    let row=document.createElement('div');row.className='nodes-row';
+    w.nodes.forEach((n,i)=>{
+      if(i>0){let d=document.createElement('div');d.className='path-dots';[1,2,3].forEach(()=>{let p=document.createElement('div');p.className='path-dot';d.appendChild(p)});row.appendChild(d);}
+      let nd=document.createElement('div');
+      let cls={done:'done',active:'active',locked:'locked',blocked:'blocked'}[n.st];
+      nd.className='node '+cls;
+      nd.innerHTML=`<div class="node-icon">${n.icon}</div><div class="node-id">${n.id}</div><div class="node-label">${n.label}</div>`;
+      if(n.st==='done')nd.innerHTML+=`<div class="star-b">★</div>`;
+      if(n.st==='blocked')nd.innerHTML+=`<div class="pay-b">💳</div>`;
+      if(n.st!=='locked')nd.onclick=()=>openModal(n);
+      row.appendChild(nd);
+    });
+    wd.appendChild(row);c.appendChild(wd);
+  });
+}
+
+function openModal(n){
+  currentNode=n;
+  document.getElementById('m-icon').textContent=n.icon;
+  document.getElementById('m-id').textContent='FASE '+n.id;
+  document.getElementById('m-title').textContent=n.title;
+  document.getElementById('m-desc').textContent=n.desc;
+  document.getElementById('m-reward').textContent=n.reward;
+  document.getElementById('m-prompt').textContent=n.prompt;
+  let pc={done:'p-done',active:'p-active',locked:'p-locked',blocked:'p-blocked'}[n.st];
+  let pl={done:'✓ CONCLUÍDO',active:'► EM ANDAMENTO',locked:'🔒 BLOQUEADO',blocked:'💳 AGUARDA PAGAMENTO'}[n.st];
+  document.getElementById('m-status').innerHTML=`<div class="status-pill ${pc}">${pl}</div>`;
+  renderTasks(n);
+  document.getElementById('modal').classList.add('open');
+}
+
+function renderTasks(n){
+  let key='tc_v3_'+n.id;
+  let saved=JSON.parse(localStorage.getItem(key)||'null');
+  let tasks=saved||n.tasks.map(t=>({text:t[0],done:t[1]}));
+  let el=document.getElementById('m-tasks');el.innerHTML='';
+  tasks.forEach((t,i)=>{
+    let d=document.createElement('div');d.className='task';
+    d.innerHTML=`<div class="tchk ${t.done?'done':''}">${t.done?'✓':''}</div><div class="ttxt ${t.done?'done':''}">${t.text}</div>`;
+    d.onclick=()=>{tasks[i].done=!tasks[i].done;localStorage.setItem(key,JSON.stringify(tasks));renderTasks(n);updateHUD();};
+    el.appendChild(d);
+  });
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+function copyModalPrompt(){
+  if(!currentNode)return;
+  navigator.clipboard.writeText(currentNode.prompt).then(()=>{
+    let b=document.getElementById('m-copy-btn');
+    b.textContent='✓ COPIADO!';b.classList.add('copied-ok');
+    setTimeout(()=>{b.textContent='📋 COPIAR PROMPT';b.classList.remove('copied-ok')},2000);
+  });
+}
+
+function buildPrompts(){
+  let c=document.getElementById('prompts-content');c.innerHTML='';
+  WORLDS.forEach(w=>w.nodes.forEach(n=>{
+    if(n.st==='locked')return;
+    let card=document.createElement('div');card.className='prompt-card';
+    card.innerHTML=`<div class="pc-hdr"><div class="pc-icon">${n.icon}</div><div class="pc-title">FASE ${n.id} — ${n.title}</div></div><div class="pc-txt">${n.prompt}</div><button class="btn-cp" onclick="cpPrompt('${n.id}',this)">📋 COPIAR FASE ${n.id}</button>`;
+    c.appendChild(card);
+  }));
+}
+
+function cpPrompt(id,btn){
+  let node=null;WORLDS.forEach(w=>w.nodes.forEach(n=>{if(n.id===id)node=n}));
+  if(!node)return;
+  navigator.clipboard.writeText(node.prompt).then(()=>{
+    btn.textContent='✓ COPIADO!';btn.classList.add('copied-ok');
+    setTimeout(()=>{btn.textContent='📋 COPIAR FASE '+id;btn.classList.remove('copied-ok')},2000);
+  });
+}
+
+function updateHUD(){
+  let total=0,done=0,active=0,blocked=0;
+  WORLDS.forEach(w=>w.nodes.forEach(n=>{
+    total++;
+    if(n.st==='done')done++;
+    if(n.st==='active')active++;
+    if(n.st==='blocked')blocked++;
+  }));
+  let pct=Math.round(done/total*100);
+  document.getElementById('prog-fill').style.width=Math.max(pct,3)+'%';
+  document.getElementById('prog-label').textContent=done+' de '+total+' fases concluídas ('+pct+'%)';
+  document.getElementById('d-done').textContent=done;
+  document.getElementById('d-active').textContent=active;
+  document.getElementById('d-blocked').textContent=blocked;
+  document.getElementById('d-pct').textContent=pct+'%';
+}
+
+function showView(name,btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+</script>
+
+
+</body></html>
