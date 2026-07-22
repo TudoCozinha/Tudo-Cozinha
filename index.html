@@ -84,6 +84,10 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
       <input type="text" id="preco" placeholder="Ex: 866">
     </div>
     <div class="field">
+      <label>NCM (Dropify → Informações ao Lojista)</label>
+      <input type="text" id="ncm" placeholder="Ex: 82055100" oninput="calcularSH()">
+    </div>
+    <div class="field">
       <label>Categoria</label>
       <select id="cat">
         <option value="churrasco">Churrasco</option>
@@ -94,6 +98,11 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
         <option value="gourmet">Cozinha gourmet</option>
       </select>
     </div>
+  </div>
+  <div class="rblock" id="bSH" style="display:none;margin-top:16px">
+    <div class="rblock-label">Código SH — cole em "Informações alfandegárias → Sistema Harmonizado"</div>
+    <button class="btn-copy" onclick="copiar('bSH')">Copiar</button>
+    <div class="rtext" id="tSH"></div>
   </div>
   <button class="btn-main" onclick="gerar()">✦ &nbsp;Gerar Descrição Shopify</button>
   <div class="error-box" id="err"></div>
@@ -149,6 +158,18 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
 </div>
 
 <script>
+function calcularSH(){
+  const ncm=document.getElementById('ncm').value.replace(/\D/g,'');
+  const bSH=document.getElementById('bSH');
+  if(ncm.length>=6){
+    const sh=ncm.substring(0,6);
+    document.getElementById('tSH').textContent=sh;
+    bSH.dataset.raw=sh;
+    bSH.style.display='block';
+  }else{
+    bSH.style.display='none';
+  }
+}
 function montarDescricaoHTML(json){
   let html="<div style='font-family:Jost,sans-serif;font-weight:300;line-height:1.75;color:#3a3a3a'>";
   if(json.descricao_abertura)html+="<p style='font-style:italic;font-size:15px;margin:0 0 18px'>"+json.descricao_abertura+"</p>";
