@@ -227,7 +227,7 @@ Gere SOMENTE JSON válido sem markdown, sem texto extra:
     try{json=JSON.parse(raw);}catch{const m=raw.match(/\{[\s\S]*\}/);if(m)json=JSON.parse(m[0]);else throw new Error('Resposta fora do formato. Tente novamente.');}
     document.getElementById('t1').textContent=json.titulo||'';
     const descricaoHTML=montarDescricaoHTML(json);document.getElementById('t2').innerHTML=descricaoHTML;document.getElementById('b2').dataset.raw=descricaoHTML;
-    document.getElementById('t3').textContent=json.specs||'';
+    
     document.getElementById('t4').textContent=json.seo_titulo||'';
     document.getElementById('t5').textContent=json.seo_desc||'';
     document.getElementById('t6').textContent=json.etiquetas||'';
