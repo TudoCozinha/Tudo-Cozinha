@@ -87,18 +87,7 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
       <label>NCM (Dropify → Informações ao Lojista)</label>
       <input type="text" id="ncm" placeholder="Ex: 82055100" oninput="calcularSH()">
     </div>
-    <div class="field">
-      <label>Categoria</label>
-      <select id="cat">
-        <option value="churrasco">Churrasco</option>
-        <option value="facas">Facas &amp; Afiadores</option>
-        <option value="panelas">Panelas &amp; Utensílios</option>
-        <option value="organizacao">Organização de cozinha</option>
-        <option value="mesa">Mesa posta &amp; servir</option>
-        <option value="gourmet">Cozinha gourmet</option>
-      </select>
     </div>
-  </div>
   <div class="rblock" id="bSH" style="display:none;margin-top:16px">
     <div class="rblock-label">Código SH — cole em "Informações alfandegárias → Sistema Harmonizado"</div>
     <button class="btn-copy" onclick="copiar('bSH')">Copiar</button>
@@ -147,6 +136,11 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
       <div class="rblock-label">Coleção sugerida — confira e adicione no campo "Coleções"</div>
       <button class="btn-copy" onclick="copiar('b8')">Copiar</button>
       <div class="rtext" id="t8"></div>
+    </div>
+    <div class="rblock" id="b9">
+      <div class="rblock-label">Categoria sugerida — apenas referência interna</div>
+      <button class="btn-copy" onclick="copiar('b9')">Copiar</button>
+      <div class="rtext" id="t9"></div>
     </div>
     <button class="btn-refresh" onclick="gerar()">↻ &nbsp;Gerar nova versão</button>
   </div>
@@ -199,7 +193,6 @@ async function gerar(){
   const nomeAli=document.getElementById('nomeAli').value.trim();
   const descAli=document.getElementById('descAli').value.trim();
   const preco=document.getElementById('preco').value.trim();
-  const cat=document.getElementById('cat').value;
   document.getElementById('err').style.display='none';
   document.getElementById('results').style.display='none';
   if(!key)return erro('Cole sua chave da API Anthropic no campo acima.');
@@ -228,17 +221,18 @@ Dados brutos do fornecedor:
 Nome: ${nomeAli}
 Descrição: ${descAli}
 ${preco?'Preço: R$ '+preco:''}
-Categoria: ${cat}
 
 Escolha o "tipo" mais adequado dentre estas opções fixas do catálogo Shopify: "Talheres", "Utensílios para Servir", "Utensílios de Preparo", "Facas e Cutelaria", "Acessórios de Churrasco", "Organização de Cozinha". Se nenhuma opção descrever bem o produto, crie um tipo curto e específico (máximo 3 palavras) em vez de forçar uma opção errada.
 
 Escolha a "colecao" mais adequada dentre estas opções fixas: "Preparo de Alta Performance" (utensílios de preparo, amassadores, tábuas de preparo, misturadores), "Cozimento de Alta Performance" (panelas, grelhas, itens de cozimento direto ao fogo), "Organização Inteligente" (organizadores, porta-utensílios, estruturas de armazenamento), "Corte de Elite & Manutenção" (facas, cutelos, afiadores, tábuas de corte), "Mesa & Ritual" (itens de apresentação, servir à mesa, churrasco). Se nenhuma se encaixar bem, responda "revisar manualmente".
 
+Escolha a "categoria" mais adequada dentre estas opções fixas, apenas para referência interna: "Churrasco", "Facas & Afiadores", "Panelas & Utensílios", "Organização de cozinha", "Mesa posta & servir", "Cozinha gourmet".
+
 Gere SOMENTE JSON válido sem markdown, sem texto extra:
 {"titulo":"título premium para Shopify, máximo 60 caracteres, emotivo e específico","descricao_abertura":"1 frase de abertura emotiva ligando o produto ao ritual do churrasco/cozinha em família, sem aspas duplas dentro do texto",
 "descricao_corpo":"1 a 2 parágrafos (separados por \\n\\n) com o produto e seus diferenciais reais extraídos dos dados brutos, sem aspas duplas dentro do texto",
 "descricao_beneficios":["3 a 5 benefícios reais curtos, um por item do array, sem aspas duplas dentro do texto"],
-"descricao_fechamento":"frase de fechamento afetiva e sóbria sobre família, lar ou partilha, sem aspas duplas dentro do texto","specs":"especificações técnicas limpas e relevantes extraídas dos dados brutos, formato: • Material: xxx\\n• Dimensões: xxx\\n• Conteúdo da caixa: xxx (apenas o que tiver nos dados, sem inventar)","seo_titulo":"título SEO otimizado, máximo 60 caracteres, inclui palavra-chave principal","seo_desc":"meta descrição SEO, máximo 155 caracteres, persuasiva e com palavra-chave","etiquetas":"15 a 20 etiquetas Shopify separadas por vírgula, em português, misturando: categoria, material, uso, ocasião, público-alvo e estilo de vida.","tipo":"o tipo escolhido conforme as opções acima, apenas o texto, sem explicação","colecao":"a coleção escolhida conforme as opções acima, apenas o texto, sem explicação"}`;
+"descricao_fechamento":"frase de fechamento afetiva e sóbria sobre família, lar ou partilha, sem aspas duplas dentro do texto","specs":"especificações técnicas limpas e relevantes extraídas dos dados brutos, formato: • Material: xxx\\n• Dimensões: xxx\\n• Conteúdo da caixa: xxx (apenas o que tiver nos dados, sem inventar)","seo_titulo":"título SEO otimizado, máximo 60 caracteres, inclui palavra-chave principal","seo_desc":"meta descrição SEO, máximo 155 caracteres, persuasiva e com palavra-chave","etiquetas":"15 a 20 etiquetas Shopify separadas por vírgula, em português, misturando: categoria, material, uso, ocasião, público-alvo e estilo de vida.","tipo":"o tipo escolhido conforme as opções acima, apenas o texto, sem explicação","colecao":"a coleção escolhida conforme as opções acima, apenas o texto, sem explicação","categoria_sugerida":"a categoria escolhida conforme as opções acima, apenas o texto, sem explicação"}`;
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1400,messages:[{role:'user',content:prompt}]})});
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||'Erro HTTP '+res.status);}
@@ -254,6 +248,7 @@ Gere SOMENTE JSON válido sem markdown, sem texto extra:
     document.getElementById('t6').textContent=json.etiquetas||'';
     document.getElementById('t7').textContent=json.tipo||'';
     document.getElementById('t8').textContent=json.colecao||'';
+    document.getElementById('t9').textContent=json.categoria_sugerida||'';
     document.getElementById('load').style.display='none';
     document.getElementById('results').style.display='block';
   }catch(e){erro('Erro: '+e.message);}finally{document.querySelector('.btn-main').disabled=false;document.getElementById('load').style.display='none';}
