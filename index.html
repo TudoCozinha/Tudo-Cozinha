@@ -110,7 +110,7 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
       <div class="rtext" id="t1"></div>
     </div>
     <div class="rblock" id="b2">
-      <div class="rblock-label">Descrição completa — cole no campo "Descrição"</div>
+      <div class="rblock-label">Descrição completa (HTML) — no Shopify, abra o editor de código do campo "Descrição" (ícone &lt;&gt;) e cole</div>
       <button class="btn-copy" onclick="copiar('b2')">Copiar</button>
       <div class="rtext" id="t2"></div>
     </div>
@@ -134,6 +134,16 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
       <button class="btn-copy" onclick="copiar('b6')">Copiar</button>
       <div class="rtext" id="t6"></div>
     </div>
+    <div class="rblock" id="b7">
+      <div class="rblock-label">Tipo sugerido — confira e selecione no campo "Tipo"</div>
+      <button class="btn-copy" onclick="copiar('b7')">Copiar</button>
+      <div class="rtext" id="t7"></div>
+    </div>
+    <div class="rblock" id="b8">
+      <div class="rblock-label">Coleção sugerida — confira e adicione no campo "Coleções"</div>
+      <button class="btn-copy" onclick="copiar('b8')">Copiar</button>
+      <div class="rtext" id="t8"></div>
+    </div>
     <button class="btn-refresh" onclick="gerar()">↻ &nbsp;Gerar nova versão</button>
   </div>
 </div>
@@ -144,6 +154,22 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
 </div>
 
 <script>
+function montarDescricaoHTML(json){
+  let html="<div style='font-family:Jost,sans-serif;font-weight:300;line-height:1.75;color:#3a3a3a'>";
+  if(json.descricao_abertura)html+="<p style='font-style:italic;font-size:15px;margin:0 0 18px'>"+json.descricao_abertura+"</p>";
+  html+="<h3 style='font-family:Georgia,serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;margin:22px 0 10px'>O Ritual</h3>";
+  if(json.descricao_corpo){const paras=String(json.descricao_corpo).split(/\n\n+/);paras.forEach(function(p){if(p.trim())html+="<p style='margin:0 0 16px'>"+p.trim()+"</p>";});}
+  html+="<div style='width:48px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:20px auto'></div>";
+  if(Array.isArray(json.descricao_beneficios)&&json.descricao_beneficios.length){
+    html+="<ul style='list-style:none;padding:0;margin:0 0 20px'>";
+    json.descricao_beneficios.forEach(function(b){html+="<li style='padding:6px 0'>✓ &nbsp;"+b+"</li>";});
+    html+="</ul>";
+  }
+  html+="<div style='width:48px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:20px auto'></div>";
+  if(json.descricao_fechamento)html+="<p style='font-family:Georgia,serif;font-style:italic;font-size:13px;text-align:center;color:#7a1528;margin:0'>"+json.descricao_fechamento+"</p>";
+  html+="</div>";
+  return html;
+}
 async function gerar(){
   const key=document.getElementById('apiKey').value.trim();
   const nomeAli=document.getElementById('nomeAli').value.trim();
@@ -157,9 +183,19 @@ async function gerar(){
   if(!descAli)return erro('Cole a descrição do produto do AliExpress.');
   document.getElementById('load').style.display='block';
   document.querySelector('.btn-main').disabled=true;
+  const angulos=[
+    'Comece com uma cena sensorial concreta (som, cheiro, textura) do momento de uso do produto — sem usar a palavra "sagrado" ou "ritual".',
+    'Comece com uma pequena observação sobre o gesto cotidiano de quem cozinha ou serve, algo específico e visual, não abstrato.',
+    'Comece com uma frase curta e direta sobre o que o produto resolve na prática, depois conecte à emoção.',
+    'Comece com uma lembrança implícita de infância ou família (sem clichê de "momento sagrado" ou "celebrar tradição"), algo mais sutil.',
+    'Comece descrevendo o contraste entre um utensílio comum e este produto específico, mostrando a diferença real.'
+  ];
+  const anguloEscolhido=angulos[Math.floor(Math.random()*angulos.length)];
   const prompt=`Você é especialista em copywriting para e-commerce de luxo brasileiro.
 A marca "Tudo Cozinha" vende produtos premium para famílias brasileiras apaixonadas por cozinha e churrasco.
 Tom da marca: sofisticado, emotivo, artesanal, que valoriza momentos em família e ritual do churrasco.
+IMPORTANTE — VARIEDADE: ${anguloEscolhido}
+PROIBIDO usar estas frases já desgastadas: "existe um momento sagrado", "celebra uma tradição", "convida você a desacelerar", "peça de presença", "vai além de ser apenas um".
 NUNCA mencione China, AliExpress, fornecedor ou origem do produto.
 NUNCA use palavras genéricas como "produto de qualidade" ou "item imperdível".
 Escreva sempre em português brasileiro impecável.
@@ -170,8 +206,15 @@ Descrição: ${descAli}
 ${preco?'Preço: R$ '+preco:''}
 Categoria: ${cat}
 
+Escolha o "tipo" mais adequado dentre estas opções fixas do catálogo Shopify: "Talheres", "Utensílios para Servir", "Utensílios de Preparo", "Facas e Cutelaria", "Acessórios de Churrasco", "Organização de Cozinha". Se nenhuma opção descrever bem o produto, crie um tipo curto e específico (máximo 3 palavras) em vez de forçar uma opção errada.
+
+Escolha a "colecao" mais adequada dentre estas opções fixas: "Corte de Elite & Manutenção" (facas, cutelos, afiadores), "Preparo de Alta Performance" (utensílios de preparo, amassadores, tábuas), "Ritual do Domingo" (itens de apresentação/servir à mesa e churrasco). Se nenhuma se encaixar bem, responda "revisar manualmente".
+
 Gere SOMENTE JSON válido sem markdown, sem texto extra:
-{"titulo":"título premium para Shopify, máximo 60 caracteres, emotivo e específico","descricao":"descrição completa com 3 parágrafos: 1) abertura emotiva conectando ao ritual do churrasco/cozinha, 2) apresentação do produto e seus diferenciais reais, 3) fechamento inspirador. Use ✓ para bullets de benefícios no final. Máximo 300 palavras.","specs":"especificações técnicas limpas e relevantes extraídas dos dados brutos, formato: • Material: xxx\\n• Dimensões: xxx\\n• Conteúdo da caixa: xxx (apenas o que tiver nos dados, sem inventar)","seo_titulo":"título SEO otimizado, máximo 60 caracteres, inclui palavra-chave principal","seo_desc":"meta descrição SEO, máximo 155 caracteres, persuasiva e com palavra-chave","etiquetas":"15 a 20 etiquetas Shopify separadas por vírgula, em português, misturando: categoria, material, uso, ocasião, público-alvo e estilo de vida."}`;
+{"titulo":"título premium para Shopify, máximo 60 caracteres, emotivo e específico","descricao_abertura":"1 frase de abertura emotiva ligando o produto ao ritual do churrasco/cozinha em família, sem aspas duplas dentro do texto",
+"descricao_corpo":"1 a 2 parágrafos (separados por \\n\\n) com o produto e seus diferenciais reais extraídos dos dados brutos, sem aspas duplas dentro do texto",
+"descricao_beneficios":["3 a 5 benefícios reais curtos, um por item do array, sem aspas duplas dentro do texto"],
+"descricao_fechamento":"frase de fechamento afetiva e sóbria sobre família, lar ou partilha, sem aspas duplas dentro do texto","specs":"especificações técnicas limpas e relevantes extraídas dos dados brutos, formato: • Material: xxx\\n• Dimensões: xxx\\n• Conteúdo da caixa: xxx (apenas o que tiver nos dados, sem inventar)","seo_titulo":"título SEO otimizado, máximo 60 caracteres, inclui palavra-chave principal","seo_desc":"meta descrição SEO, máximo 155 caracteres, persuasiva e com palavra-chave","etiquetas":"15 a 20 etiquetas Shopify separadas por vírgula, em português, misturando: categoria, material, uso, ocasião, público-alvo e estilo de vida.","tipo":"o tipo escolhido conforme as opções acima, apenas o texto, sem explicação","colecao":"a coleção escolhida conforme as opções acima, apenas o texto, sem explicação"}`;
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1400,messages:[{role:'user',content:prompt}]})});
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||'Erro HTTP '+res.status);}
@@ -180,17 +223,19 @@ Gere SOMENTE JSON válido sem markdown, sem texto extra:
     let json;
     try{json=JSON.parse(raw);}catch{const m=raw.match(/\{[\s\S]*\}/);if(m)json=JSON.parse(m[0]);else throw new Error('Resposta fora do formato. Tente novamente.');}
     document.getElementById('t1').textContent=json.titulo||'';
-    document.getElementById('t2').textContent=json.descricao||'';
+    const descricaoHTML=montarDescricaoHTML(json);document.getElementById('t2').innerHTML=descricaoHTML;document.getElementById('b2').dataset.raw=descricaoHTML;
     document.getElementById('t3').textContent=json.specs||'';
     document.getElementById('t4').textContent=json.seo_titulo||'';
     document.getElementById('t5').textContent=json.seo_desc||'';
     document.getElementById('t6').textContent=json.etiquetas||'';
+    document.getElementById('t7').textContent=json.tipo||'';
+    document.getElementById('t8').textContent=json.colecao||'';
     document.getElementById('load').style.display='none';
     document.getElementById('results').style.display='block';
   }catch(e){erro('Erro: '+e.message);}finally{document.querySelector('.btn-main').disabled=false;document.getElementById('load').style.display='none';}
 }
 function erro(msg){const el=document.getElementById('err');el.textContent=msg;el.style.display='block';document.getElementById('load').style.display='none';document.querySelector('.btn-main').disabled=false;}
-function copiar(id){const txt=document.getElementById(id).querySelector('.rtext').textContent;const btn=document.getElementById(id).querySelector('.btn-copy');navigator.clipboard.writeText(txt).then(()=>{btn.textContent='✓ Copiado';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2200);});}
+function copiar(id){const block=document.getElementById(id);const txt=block.dataset.raw!==undefined?block.dataset.raw:block.querySelector('.rtext').textContent;const btn=block.querySelector('.btn-copy');navigator.clipboard.writeText(txt).then(()=>{btn.textContent='✓ Copiado';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2200);});}
 </script>
 </body>
 </html>
