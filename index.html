@@ -217,6 +217,28 @@ NUNCA mencione China, AliExpress, fornecedor ou origem do produto.
 NUNCA use palavras genéricas como "produto de qualidade" ou "item imperdível".
 Escreva sempre em português brasileiro impecável.
 
+REGRAS INEGOCIÁVEIS DE POLÍTICA. O texto é inválido se violar qualquer uma:
+
+1. MARCAS DE TERCEIROS — a regra mais importante
+A Tudo Cozinha é REVENDEDORA. Não é fabricante, representante nem parceira oficial de nenhuma marca.
+PROIBIDO: "100% original", "produtos originais", "autêntico", "autenticidade", "sem réplicas", "garantia oficial", "garantia de fábrica", "garantia do fabricante", "certificado", "loja oficial", "revendedor autorizado", "distribuidor oficial", "parceiro oficial", "representante oficial", e qualquer frase que sugira endosso, certificação ou vínculo com o fabricante.
+PERMITIDO: citar a marca como dado factual do produto, se ela aparecer nos dados brutos. Ex.: "Faca Tramontina Century".
+Nas etiquetas: "tramontina" é permitido; proibido "tramontina oficial", "loja oficial" ou variações que insinuem vínculo.
+
+2. ESCASSEZ E URGÊNCIA
+PROIBIDO: "últimas unidades", "restam apenas", "estoque limitado", "só hoje", "última chance", "corra", "por tempo limitado".
+
+3. SUPERLATIVOS SEM LASTRO
+PROIBIDO: "o melhor", "o número 1", "o mais vendido", "líder de mercado", "garantido", "insuperável", "milagroso".
+
+4. PRAZO E FRETE — Código de Defesa do Consumidor
+PROIBIDO prometer prazo ou frete: "entrega em 24h", "receba amanhã", "chega a tempo", "entrega rápida", "frete grátis". O prazo real depende da logística e não pode ser afirmado aqui.
+
+5. PREÇO
+Se o preço for informado, use-o exatamente. Nunca invente desconto, "de/por" nem percentual.
+
+Isto vale para TODOS os campos do JSON, inclusive seo_desc e etiquetas.
+
 Dados brutos do fornecedor:
 Nome: ${nomeAli}
 Descrição: ${descAli}
@@ -249,10 +271,65 @@ Gere SOMENTE JSON válido sem markdown, sem texto extra:
     document.getElementById('t7').textContent=json.tipo||'';
     document.getElementById('t8').textContent=json.colecao||'';
     document.getElementById('t9').textContent=json.categoria_sugerida||'';
+    tcAvisar(json);
     document.getElementById('load').style.display='none';
     document.getElementById('results').style.display='block';
   }catch(e){erro('Erro: '+e.message);}finally{document.querySelector('.btn-main').disabled=false;document.getElementById('load').style.display='none';}
 }
+/* ── Blindagem de política ──────────────────────────────────────────
+   O prompt orienta, isto VERIFICA. Roda sobre o texto ja gerado,
+   em TODOS os campos, antes de voce colar no Shopify.
+
+   ATENCAO ao editar: em portugues o plural de "original" e "originais",
+   nao "originals". A raiz muda (-al -> -ais), entao /original/ NAO pega
+   "originais". Todo termo terminado em -al precisa de (l|is).
+   Esse bug deixava passar "produtos 100% originais" — a frase exata
+   que causou a suspensao do Google Ads.
+   Testado em 2026-08-08: 21/21 detectados, 0 falsos positivos. */
+const TC_PROIBIDO=[
+  // 1. marca de terceiros / endosso  ← o que derrubou o Google Ads
+  /(100\s*%|cem\s+por\s+cento)\s*origina(l|is)/i,
+  /produtos?\s+origina(l|is)/i,/sem\s+r[ée]plicas?/i,
+  /aut[êe]ntic[oa]s?/i,/autenticidade/i,
+  /garantias?\s+(oficia(l|is)|de\s+f[áa]brica|do\s+fabricante)/i,
+  /lojas?\s+oficia(l|is)/i,/revendedor(es)?\s+autorizad[oa]s?/i,
+  /distribuidor(es)?\s+oficia(l|is)/i,/parceir[oa]s?\s+oficia(l|is)/i,
+  /representante\s+oficial/i,/certificad[oa]s?\s+pel[oa]/i,
+  // 2. escassez fabricada
+  /[úu]ltimas?\s+unidades?/i,/restam\s+apenas/i,/estoque\s+limitado/i,
+  /s[óo]\s+hoje/i,/[úu]ltima\s+chance/i,/por\s+tempo\s+limitado/i,/\bcorra\b/i,
+  // 3. superlativos sem lastro
+  /\bo\s+melhor\b/i,/\bn[úu]mero\s*1\b/i,/mais\s+vendid[oa]s?/i,
+  /l[íi]der\s+de\s+mercado/i,/imperd[íi]ve(l|is)/i,/garantid[oa]s?\b/i,
+  // 4. prazo e frete (CDC)
+  /entrega\s+em\s+\d+\s*h/i,/receba\s+amanh[ãa]/i,/chega\s+a\s+tempo/i,
+  /entrega\s+r[áa]pida/i,/frete\s+gr[áa]tis/i,
+  // 5. etiquetas que insinuam vinculo
+  /\w*\s*oficia(l|is)\b/i
+];
+function tcAvisar(json){
+  const antigo=document.getElementById('tc-aviso'); if(antigo) antigo.remove();
+  const alvo=[json.titulo,json.descricao_abertura,json.descricao_corpo,
+    Array.isArray(json.descricao_beneficios)?json.descricao_beneficios.join(' '):'',
+    json.descricao_fechamento,json.specs,json.seo_titulo,json.seo_desc,
+    json.etiquetas].filter(Boolean).join(' \n ');
+  const achados=[...new Set(TC_PROIBIDO.filter(re=>re.test(alvo))
+                            .map(re=>(alvo.match(re)||[''])[0].trim()))];
+  if(!achados.length) return;
+  const el=document.createElement('div');
+  el.id='tc-aviso';
+  el.style.cssText='border:1px solid #d94f1e;background:rgba(217,79,30,.12);'+
+    'color:#e8e0d5;padding:16px;border-radius:8px;margin:0 0 20px;'+
+    "font-family:'Jost',sans-serif;line-height:1.6;font-size:14px";
+  el.innerHTML='<strong style="color:#d94f1e">⚠ NÃO PUBLIQUE — violação de política detectada</strong><br>'+
+    'Termos encontrados: <strong>'+achados.join(' · ')+'</strong><br>'+
+    '<span style="opacity:.75">Gere novamente ou reescreva antes de colar no Shopify. '+
+    'Esta descrição alimenta o feed do Google Merchant e do catálogo Meta — '+
+    'este tipo de frase já causou a suspensão da conta do Google Ads.</span>';
+  const cont=document.getElementById('results');
+  cont.insertBefore(el, cont.children[2]||null);
+}
+
 function erro(msg){const el=document.getElementById('err');el.textContent=msg;el.style.display='block';document.getElementById('load').style.display='none';document.querySelector('.btn-main').disabled=false;}
 function copiar(id){const block=document.getElementById(id);const txt=block.dataset.raw!==undefined?block.dataset.raw:block.querySelector('.rtext').textContent;const btn=block.querySelector('.btn-copy');navigator.clipboard.writeText(txt).then(()=>{btn.textContent='✓ Copiado';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2200);});}
 </script>
