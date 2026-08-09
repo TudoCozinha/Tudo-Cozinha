@@ -97,17 +97,29 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
   <!-- ── Calculadora de preço e viabilidade ───────────────────────── -->
   <div class="two-col" style="margin-top:16px">
     <div class="field">
-      <label>Custo no Dropify (R$)</label>
+      <label>1 · Custo no Dropify (R$)</label>
       <input type="text" id="custo" placeholder="Ex: 40,60" oninput="calcularPreco()">
+      <div class="hint" style="margin-top:6px">O que você paga (wholesalePrice)</div>
     </div>
     <div class="field">
-      <label>Menor preço no mercado (R$)</label>
-      <input type="text" id="mercado" placeholder="Ex: 48,90" oninput="calcularPreco()">
-      <div class="hint" style="margin-top:6px">
-        <a href="#" onclick="buscarMercado();return false"
-           style="color:#c9a84c;text-decoration:none;border-bottom:1px solid rgba(201,168,76,.4)">
-           Buscar preço real no Google Shopping</a>
-      </div>
+      <label>2 · Preço sugerido pela Dropify (R$)</label>
+      <input type="text" id="sugDropify" placeholder="Ex: 53,37" oninput="calcularPreco()">
+      <div class="hint" style="margin-top:6px">O que a Dropify manda cobrar — conferir, não obedecer</div>
+    </div>
+  </div>
+  <div class="field" style="margin-top:12px">
+    <label>3 · Menor preço em loja oficial ou revendedor (R$)</label>
+    <input type="text" id="mercado" placeholder="Ex: 48,90" oninput="calcularPreco()">
+    <div class="hint" style="margin-top:6px">
+      Conferir agora em:
+      <a href="#" onclick="buscarMercado('shopping');return false"
+         style="color:#c9a84c;text-decoration:none;border-bottom:1px solid rgba(201,168,76,.4)">Google Shopping</a>
+      &nbsp;·&nbsp;
+      <a href="#" onclick="buscarMercado('fabricante');return false"
+         style="color:#c9a84c;text-decoration:none;border-bottom:1px solid rgba(201,168,76,.4)">Site do fabricante</a>
+      &nbsp;·&nbsp;
+      <a href="#" onclick="buscarMercado('ml');return false"
+         style="color:#c9a84c;text-decoration:none;border-bottom:1px solid rgba(201,168,76,.4)">Mercado Livre</a>
     </div>
   </div>
   <div class="rblock" id="bPreco" style="display:none;margin-top:4px">
@@ -373,10 +385,28 @@ function tcNum(v){
 }
 function tcBRL(n){return 'R$ '+n.toFixed(2).replace('.',',');}
 
-function buscarMercado(){
+function buscarMercado(onde){
   const n=document.getElementById('nomeAli').value.trim();
   if(!n){alert('Preencha primeiro o nome do produto.');return;}
-  window.open('https://www.google.com/search?tbm=shop&q='+encodeURIComponent(n),'_blank');
+  const q=encodeURIComponent(n);
+  let url;
+  if(onde==='fabricante'){
+    /* Busca no Google restrita ao site oficial da marca. Detecta a marca
+       pelo proprio nome do produto; se nao reconhecer, cai numa busca por
+       "site oficial" para o usuario escolher. */
+    const marcas={tramontina:'tramontina.com.br', mor:'mor.com.br',
+                  brinox:'brinox.com.br', hercules:'herculessa.com.br',
+                  marcolino:'marcolino.com.br'};
+    const achou=Object.keys(marcas).find(m=>n.toLowerCase().includes(m));
+    url = achou
+      ? 'https://www.google.com/search?q=site%3A'+marcas[achou]+'+'+q
+      : 'https://www.google.com/search?q='+q+'+site+oficial+pre%C3%A7o';
+  }else if(onde==='ml'){
+    url='https://lista.mercadolivre.com.br/'+q;
+  }else{
+    url='https://www.google.com/search?tbm=shop&q='+q;
+  }
+  window.open(url,'_blank');
 }
 
 function calcularPreco(){
@@ -410,11 +440,34 @@ function calcularPreco(){
     texto='Com '+tcBRL(margem)+' de margem por venda você banca o anúncio com folga. Este é o tipo de produto que sustenta escala.';
   }
 
+  /* A armadilha da Dropify: varias vezes o preco que ela "sugere" cobrar
+     e MAIOR que o preco que a propria marca pratica no varejo. Obedecer a
+     sugestao coloca a loja fora do mercado. Aqui isso fica visivel. */
+  const sugDro=tcNum(document.getElementById('sugDropify').value);
+  let linhaDro='', alertaDro='';
+  if(!isNaN(sugDro) && sugDro>0){
+    const acima = sugDro - mercado;
+    linhaDro=
+      '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);padding:4px 0">'+
+        '<span style="opacity:.7">Sugerido pela Dropify</span><strong'+
+        (acima>0?' style="color:#d94f1e"':'')+'>'+tcBRL(sugDro)+'</strong></div>';
+    if(acima>0){
+      alertaDro=
+        '<div style="margin-top:12px;padding:12px;border:1px solid #d94f1e;'+
+        'background:rgba(217,79,30,.12);border-radius:6px">'+
+        '<strong style="color:#d94f1e">⚠ A sugestão da Dropify está '+tcBRL(acima)+' ACIMA do mercado</strong><br>'+
+        '<span style="opacity:.8;font-size:13px">Cobrando o que a Dropify sugere você fica mais caro que a '+
+        'própria loja oficial da marca. O cliente confere em cinco segundos. '+
+        'Ignore a sugestão e use o preço abaixo.</span></div>';
+    }
+  }
+
   saida.innerHTML=
     '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);padding:4px 0">'+
       '<span style="opacity:.7">Custo Dropify</span><strong>'+tcBRL(custo)+'</strong></div>'+
+    linhaDro+
     '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);padding:4px 0">'+
-      '<span style="opacity:.7">Menor preço no mercado</span><strong>'+tcBRL(mercado)+'</strong></div>'+
+      '<span style="opacity:.7">Menor preço em loja oficial</span><strong>'+tcBRL(mercado)+'</strong></div>'+
     '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);padding:4px 0">'+
       '<span style="opacity:.7">Preço sugerido (mercado − R$ 3)</span>'+
       '<strong style="color:#c9a84c;font-size:16px">'+tcBRL(sugerido)+'</strong></div>'+
@@ -424,7 +477,8 @@ function calcularPreco(){
     '<div style="margin-top:14px;padding:12px;border:1px solid '+cor+';'+
       'background:'+(cor==='#d94f1e'?'rgba(217,79,30,.12)':'rgba(201,168,76,.10)')+';border-radius:6px">'+
       '<strong style="color:'+cor+'">'+titulo+'</strong><br>'+
-      '<span style="opacity:.8;font-size:13px">'+texto+'</span></div>';
+      '<span style="opacity:.8;font-size:13px">'+texto+'</span></div>'+
+    alertaDro;
   bloco.style.display='block';
   bloco.dataset.preco=sugerido.toFixed(2).replace('.',',');
 
