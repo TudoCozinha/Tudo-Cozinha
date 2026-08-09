@@ -138,6 +138,55 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 let plat='Instagram e Facebook';
 function selPlt(btn){document.querySelectorAll('.plt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');plat=btn.dataset.p;}
 function mostrarErro(msg){const el=document.getElementById('err');el.textContent=msg;el.style.display='block';document.getElementById('load').style.display='none';document.querySelector('.btn-main').disabled=false;}
+/* ── Blindagem de política ──────────────────────────────────────────
+   O prompt orienta, isto VERIFICA. Um modelo pode desobedecer;
+   este filtro roda sobre o texto já gerado, antes de você copiar.
+   Os termos do bloco 1 são os que causaram a suspensão do Google Ads. */
+/* ATENCAO ao editar: em portugues o plural de "original" e "originais",
+   nao "originals". A raiz muda (-al -> -ais), entao /original/ NAO pega
+   "originais". Todo termo terminado em -al precisa de (l|is).
+   Este bug ja deixou passar "produtos 100% originais" — a frase exata
+   que causou a suspensao. Testado em 2026-08-08: 21/21 detectados,
+   0 falsos positivos sobre o copy real da marca. */
+const TC_PROIBIDO=[
+  // 1. marca de terceiros / endosso  ← o que derrubou o Google Ads
+  /(100\s*%|cem\s+por\s+cento)\s*origina(l|is)/i,
+  /produtos?\s+origina(l|is)/i,/sem\s+r[ée]plicas?/i,
+  /aut[êe]ntic[oa]s?/i,/autenticidade/i,
+  /garantias?\s+(oficia(l|is)|de\s+f[áa]brica|do\s+fabricante)/i,
+  /lojas?\s+oficia(l|is)/i,/revendedor(es)?\s+autorizad[oa]s?/i,
+  /distribuidor(es)?\s+oficia(l|is)/i,/parceir[oa]s?\s+oficia(l|is)/i,
+  /representante\s+oficial/i,/certificad[oa]s?\s+pel[oa]/i,
+  // 2. escassez fabricada
+  /[úu]ltimas?\s+unidades?/i,/restam\s+apenas/i,/estoque\s+limitado/i,
+  /s[óo]\s+hoje/i,/[úu]ltima\s+chance/i,/por\s+tempo\s+limitado/i,/\bcorra\b/i,
+  // 3. superlativos sem lastro
+  /\bo\s+melhor\b/i,/\bn[úu]mero\s*1\b/i,/mais\s+vendid[oa]s?/i,
+  /l[íi]der\s+de\s+mercado/i,/imperd[íi]ve(l|is)/i,/garantid[oa]s?\b/i,
+  // 4. prazo e frete (CDC)
+  /entrega\s+em\s+\d+\s*h/i,/receba\s+amanh[ãa]/i,/chega\s+a\s+tempo/i,
+  /entrega\s+r[áa]pida/i,/frete\s+gr[áa]tis/i,
+  // 5. hashtags que insinuam vinculo
+  /#\w*oficia(l|is)\b/i
+];
+function tcAvisar(post){
+  const antigo=document.getElementById('tc-aviso'); if(antigo) antigo.remove();
+  const alvo=[post.legenda,post.hashtags,post.cta].join(' \n ');
+  const achados=TC_PROIBIDO.filter(re=>re.test(alvo))
+                           .map(re=>(alvo.match(re)||[''])[0].trim());
+  if(!achados.length) return;
+  const el=document.createElement('div');
+  el.id='tc-aviso';
+  el.style.cssText='border:1px solid #d94f1e;background:rgba(217,79,30,.12);'+
+    'color:#e8e0d5;padding:16px;border-radius:8px;margin:0 0 18px;'+
+    "font-family:'Jost',sans-serif;line-height:1.6;font-size:14px";
+  el.innerHTML='<strong style="color:#d94f1e">⚠ NÃO PUBLIQUE — violação de política detectada</strong><br>'+
+    'Termos encontrados: <strong>'+achados.join(' · ')+'</strong><br>'+
+    '<span style="opacity:.75">Gere novamente ou reescreva antes de publicar. '+
+    'Este tipo de frase já causou a suspensão da conta do Google Ads.</span>';
+  document.getElementById('results').prepend(el);
+}
+
 async function gerar(){
   const key=document.getElementById('apiKey').value.trim();
   const nome=document.getElementById('nome').value.trim();
@@ -150,10 +199,39 @@ async function gerar(){
   if(!nome)return mostrarErro('Informe o nome do produto.');
   document.getElementById('load').style.display='block';
   document.querySelector('.btn-main').disabled=true;
-  const prompt=`Você é copywriter especialista em marcas de luxo brasileiras focadas em cozinha e churrasco.
-A marca "Tudo Cozinha" vende produtos premium para famílias brasileiras apaixonadas por boa mesa e churrasco.
-Tom: sofisticado, emotivo, valoriza momentos em família e paixão pelo fogo e pela boa comida.
-NÃO use clichês genéricos. Escreva em português brasileiro natural.
+  const prompt=`Você é copywriter de uma marca de luxo brasileira de utensílios para cozinha e churrasco.
+
+MARCA
+"Tudo Cozinha" — curadoria de utensílios premium para famílias brasileiras que valorizam a boa mesa e o churrasco. Estética dark-luxury: brasa, fogo lento, ritual de domingo.
+
+TOM
+Sofisticado, emotivo, caloroso. Memória afetiva acima de especificação técnica: o cliente não compra uma faca, compra o domingo do pai. Nunca soe como promoção agressiva de desconto — soe como curadoria. Nada de clichê genérico de e-commerce.
+
+REGRAS INEGOCIÁVEIS. O texto é inválido se violar qualquer uma:
+
+1. VERACIDADE
+Afirme apenas o que os dados do produto informados comprovam (material, marca, medida, capacidade). Nunca invente característica, prêmio, avaliação, número ou depoimento.
+
+2. MARCAS DE TERCEIROS — regra mais importante
+A Tudo Cozinha é REVENDEDORA. Não é fabricante, representante nem parceira oficial de nenhuma marca.
+PROIBIDO: "100% original", "produto original", "autêntico", "sem réplicas", "garantia oficial", "garantia de fábrica", "certificado", "loja oficial", "revendedor autorizado", "distribuidor oficial", "parceiro oficial", e qualquer frase que sugira endosso, certificação ou vínculo com o fabricante.
+PERMITIDO: citar a marca como dado factual do produto. Ex.: "Faca Tramontina Century".
+HASHTAGS: #tramontina é permitido. Proibido #tramontinaoficial, #lojaoficial ou variações que insinuem vínculo.
+
+3. ESCASSEZ E URGÊNCIA
+PROIBIDO: "últimas unidades", "restam apenas", "estoque limitado", "só hoje", "última chance", "corra", "por tempo limitado", contagem regressiva.
+
+4. SUPERLATIVOS SEM LASTRO
+PROIBIDO: "o melhor", "o número 1", "o mais vendido", "líder de mercado", "garantido", "imperdível", "milagroso", "insuperável".
+
+5. PRAZO E FRETE — Código de Defesa do Consumidor
+PROIBIDO prometer prazo: "entrega em 24h", "receba amanhã", "chega a tempo", "entrega rápida", "frete grátis".
+PERMITIDO: "entrega para todo o Brasil", "nota fiscal em todo pedido", "compra segura".
+
+6. PREÇO
+Se o preço for informado, cite-o exatamente. Nunca invente desconto, "de/por" nem percentual.
+
+Escreva em português do Brasil natural.
 
 Produto:
 Nome: ${nome}
@@ -163,7 +241,7 @@ Categoria: ${cat}
 Plataforma: ${plat}
 
 Responda SOMENTE com JSON válido, sem texto extra, sem markdown:
-{"legenda":"legenda emotiva de 3 a 5 linhas, máximo 2 emojis, que desperte desejo genuíno","hashtags":"28 hashtags em português e inglês separadas por espaço","cta":"call to action curto e persuasivo para bio ou stories, máximo 2 linhas"}`;
+{"legenda":"legenda emotiva de 3 a 5 linhas, máximo 2 emojis, que desperte desejo genuíno","hashtags":"28 hashtags em português e inglês separadas por espaço","cta":"call to action curto e elegante para bio ou stories, máximo 2 linhas, sem urgência nem contagem de tempo"}`;
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:650,messages:[{role:'user',content:prompt}]})});
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||'Erro HTTP '+res.status);}
@@ -174,6 +252,7 @@ Responda SOMENTE com JSON válido, sem texto extra, sem markdown:
     document.getElementById('t1').textContent=json.legenda||'';
     document.getElementById('t2').textContent=json.hashtags||'';
     document.getElementById('t3').textContent=json.cta||'';
+    tcAvisar(json);
     document.getElementById('load').style.display='none';
     document.getElementById('results').style.display='block';
   }catch(e){mostrarErro('Erro: '+e.message);}finally{document.querySelector('.btn-main').disabled=false;document.getElementById('load').style.display='none';}
