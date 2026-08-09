@@ -111,7 +111,8 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
     </div>
   </div>
   <div class="rblock" id="bPreco" style="display:none;margin-top:4px">
-    <div class="rblock-label">Preço sugerido e viabilidade</div>
+    <div class="rblock-label">Preço sugerido e viabilidade — cole no campo "Preço" do Shopify</div>
+    <button class="btn-copy" onclick="copiarPreco()">Copiar preço</button>
     <div class="rtext" id="tPreco" style="line-height:1.9"></div>
   </div>
   <button class="btn-main" onclick="gerar()">✦ &nbsp;Gerar Descrição Shopify</button>
@@ -425,9 +426,20 @@ function calcularPreco(){
       '<strong style="color:'+cor+'">'+titulo+'</strong><br>'+
       '<span style="opacity:.8;font-size:13px">'+texto+'</span></div>';
   bloco.style.display='block';
+  bloco.dataset.preco=sugerido.toFixed(2).replace('.',',');
 
   const campoPreco=document.getElementById('preco');
   if(margem>0 && !campoPreco.dataset.tocado) campoPreco.value=sugerido.toFixed(2).replace('.',',');
+}
+
+function copiarPreco(){
+  const v=document.getElementById('bPreco').dataset.preco||'';
+  if(!v) return;
+  const btn=document.querySelector('#bPreco .btn-copy');
+  navigator.clipboard.writeText(v).then(function(){
+    btn.textContent='✓ Copiado'; btn.classList.add('ok');
+    setTimeout(function(){btn.textContent='Copiar preço';btn.classList.remove('ok');},2200);
+  });
 }
 document.addEventListener('DOMContentLoaded',function(){
   const p=document.getElementById('preco');
