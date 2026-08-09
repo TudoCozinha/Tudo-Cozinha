@@ -93,6 +93,27 @@ textarea{resize:vertical;min-height:100px;line-height:1.6}
     <button class="btn-copy" onclick="copiar('bSH')">Copiar</button>
     <div class="rtext" id="tSH"></div>
   </div>
+
+  <!-- ── Calculadora de preço e viabilidade ───────────────────────── -->
+  <div class="two-col" style="margin-top:16px">
+    <div class="field">
+      <label>Custo no Dropify (R$)</label>
+      <input type="text" id="custo" placeholder="Ex: 40,60" oninput="calcularPreco()">
+    </div>
+    <div class="field">
+      <label>Menor preço no mercado (R$)</label>
+      <input type="text" id="mercado" placeholder="Ex: 48,90" oninput="calcularPreco()">
+      <div class="hint" style="margin-top:6px">
+        <a href="#" onclick="buscarMercado();return false"
+           style="color:#c9a84c;text-decoration:none;border-bottom:1px solid rgba(201,168,76,.4)">
+           Buscar preço real no Google Shopping</a>
+      </div>
+    </div>
+  </div>
+  <div class="rblock" id="bPreco" style="display:none;margin-top:4px">
+    <div class="rblock-label">Preço sugerido e viabilidade</div>
+    <div class="rtext" id="tPreco" style="line-height:1.9"></div>
+  </div>
   <button class="btn-main" onclick="gerar()">✦ &nbsp;Gerar Descrição Shopify</button>
   <div class="error-box" id="err"></div>
   <div class="loading" id="load">
@@ -329,6 +350,89 @@ function tcAvisar(json){
   const cont=document.getElementById('results');
   cont.insertBefore(el, cont.children[2]||null);
 }
+
+/* ── Calculadora de preço e viabilidade ────────────────────────────
+   NAO pergunta o preco de mercado para a IA: um modelo nao conhece
+   precos de hoje e inventaria um numero plausivel e falso. O preco
+   e a variavel que decide se o produto da lucro — tem que ser dado
+   real. Por isso o botao abre o Google Shopping: voce ve, voce cola.
+
+   Regra do preco: mercado menos R$ 3,00.
+   Regra da viabilidade: o que paga o anuncio nao e a margem em %,
+   e a margem em REAIS. Adquirir um cliente no Meta no Brasil custa
+   entre R$15 e R$40. Abaixo de ~R$30 de margem, cada venda com
+   trafego pago da prejuizo. */
+const TC_DESCONTO=3.00;
+const TC_MIN_TRAFEGO=30.00;   // margem minima para bancar trafego pago
+const TC_BOM_TRAFEGO=70.00;   // margem confortavel
+
+function tcNum(v){
+  if(!v) return NaN;
+  return parseFloat(String(v).replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}\b)/g,'').replace(',','.'));
+}
+function tcBRL(n){return 'R$ '+n.toFixed(2).replace('.',',');}
+
+function buscarMercado(){
+  const n=document.getElementById('nomeAli').value.trim();
+  if(!n){alert('Preencha primeiro o nome do produto.');return;}
+  window.open('https://www.google.com/search?tbm=shop&q='+encodeURIComponent(n),'_blank');
+}
+
+function calcularPreco(){
+  const custo=tcNum(document.getElementById('custo').value);
+  const mercado=tcNum(document.getElementById('mercado').value);
+  const bloco=document.getElementById('bPreco');
+  const saida=document.getElementById('tPreco');
+  if(isNaN(custo)||isNaN(mercado)||custo<=0||mercado<=0){bloco.style.display='none';return;}
+
+  const sugerido=Math.max(mercado-TC_DESCONTO, 0);
+  const margem=sugerido-custo;
+  const pct=sugerido>0 ? (margem/sugerido*100) : 0;
+
+  let cor,titulo,texto;
+  if(margem<=0){
+    cor='#d94f1e';
+    titulo='INVIÁVEL — você perderia dinheiro em cada venda';
+    texto='Seu custo é maior que o preço de mercado. Nem vendendo a preço de mercado dá lucro. Este produto não deveria estar no catálogo.';
+  }else if(margem<TC_MIN_TRAFEGO){
+    cor='#d94f1e';
+    titulo='NÃO banca tráfego pago';
+    texto='Adquirir um cliente no Meta custa entre R$15 e R$40. Com '+tcBRL(margem)+
+          ' de margem, cada venda vinda de anúncio dá prejuízo. Serve só para tráfego orgânico e para dar seriedade à loja — nunca coloque verba de anúncio aqui.';
+  }else if(margem<TC_BOM_TRAFEGO){
+    cor='#c9a84c';
+    titulo='LIMÍTROFE — dá, mas sem folga';
+    texto='Com '+tcBRL(margem)+' você cobre um custo de aquisição baixo, mas qualquer piora no CPA come o lucro. Vale para escalar só depois que a campanha estiver otimizada.';
+  }else{
+    cor='#c9a84c';
+    titulo='VIÁVEL para tráfego pago';
+    texto='Com '+tcBRL(margem)+' de margem por venda você banca o anúncio com folga. Este é o tipo de produto que sustenta escala.';
+  }
+
+  saida.innerHTML=
+    '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);padding:4px 0">'+
+      '<span style="opacity:.7">Custo Dropify</span><strong>'+tcBRL(custo)+'</strong></div>'+
+    '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);padding:4px 0">'+
+      '<span style="opacity:.7">Menor preço no mercado</span><strong>'+tcBRL(mercado)+'</strong></div>'+
+    '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);padding:4px 0">'+
+      '<span style="opacity:.7">Preço sugerido (mercado − R$ 3)</span>'+
+      '<strong style="color:#c9a84c;font-size:16px">'+tcBRL(sugerido)+'</strong></div>'+
+    '<div style="display:flex;justify-content:space-between;padding:4px 0">'+
+      '<span style="opacity:.7">Sua margem</span><strong>'+tcBRL(margem)+
+      ' &nbsp;<span style="opacity:.6;font-weight:300">('+pct.toFixed(0)+'%)</span></strong></div>'+
+    '<div style="margin-top:14px;padding:12px;border:1px solid '+cor+';'+
+      'background:'+(cor==='#d94f1e'?'rgba(217,79,30,.12)':'rgba(201,168,76,.10)')+';border-radius:6px">'+
+      '<strong style="color:'+cor+'">'+titulo+'</strong><br>'+
+      '<span style="opacity:.8;font-size:13px">'+texto+'</span></div>';
+  bloco.style.display='block';
+
+  const campoPreco=document.getElementById('preco');
+  if(margem>0 && !campoPreco.dataset.tocado) campoPreco.value=sugerido.toFixed(2).replace('.',',');
+}
+document.addEventListener('DOMContentLoaded',function(){
+  const p=document.getElementById('preco');
+  if(p) p.addEventListener('input',function(){p.dataset.tocado='1';});
+});
 
 function erro(msg){const el=document.getElementById('err');el.textContent=msg;el.style.display='block';document.getElementById('load').style.display='none';document.querySelector('.btn-main').disabled=false;}
 function copiar(id){const block=document.getElementById(id);const txt=block.dataset.raw!==undefined?block.dataset.raw:block.querySelector('.rtext').textContent;const btn=block.querySelector('.btn-copy');navigator.clipboard.writeText(txt).then(()=>{btn.textContent='✓ Copiado';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2200);});}
